@@ -1,4 +1,4 @@
 export const IMAGES = {
     logo: "/images/logo.svg",
-    bannerImage: "/images/girls_with_book.png",
+    bannerImage: "/images/boy_with_books.png",
 } as const;

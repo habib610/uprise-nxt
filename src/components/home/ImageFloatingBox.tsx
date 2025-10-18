@@ -12,7 +12,7 @@ const ImageFloatingBox = ({
     return (
         <div
             className={cn(
-                "px-4 py-2 bg-white border border-gray-100 rounded absolute  flex justify-between  gap-3",
+                "px-4 py-2 bg-white border border-gray-100 rounded-lg absolute  flex justify-between  gap-3",
                 className
             )}
         >
@@ -27,10 +27,15 @@ const ImageFloatingBox = ({
                 </div>
             </div>
             <div className="flex flex-col  items-center flex-1">
-                <h3 className={cn("text-2xl font-medium", titleClass)}>
+                <h3
+                    className={cn(
+                        "text-2xl font-medium text-gray-800",
+                        titleClass
+                    )}
+                >
                     {title}
                 </h3>
-                <p className="text-nowrap text-xs">{subtitle}</p>
+                <p className="text-nowrap text-xs text-gray-600">{subtitle}</p>
             </div>
         </div>
     );

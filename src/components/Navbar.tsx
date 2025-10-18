@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Hamburger from "./Hamburger";
 
-const Navbar = () => {
+const Navbar = ({ authPage }: { authPage: boolean }) => {
     return (
         <header className="fixed top-0 inset-x-0 z-50 bg-white/5 backdrop-blur-xl border-b border-white/20 shadow-md ">
             <div className="container mx-auto flex justify-between items-center px-6 py-1 md:py-2 relative">
@@ -21,18 +21,22 @@ const Navbar = () => {
                 </Link>
 
                 <nav className="hidden md:flex items-center space-x-8">
-                    {NAV_LINKS.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.path}
-                            className="text-primary hover:text-secondary font-medium transition duration-200"
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
-                    <Link className="btn-primary" href={LOGIN}>
-                        Login
-                    </Link>
+                    {authPage && (
+                        <>
+                            {NAV_LINKS.map((link) => (
+                                <Link
+                                    key={link.name}
+                                    href={link.path}
+                                    className="text-primary hover:text-secondary font-medium transition duration-200"
+                                >
+                                    {link.name}
+                                </Link>
+                            ))}
+                            <Link className="btn-primary" href={LOGIN}>
+                                Login
+                            </Link>
+                        </>
+                    )}
                 </nav>
 
                 <Hamburger />
