@@ -1,27 +1,47 @@
+"use client";
+import AuthHead from "@/components/auth/AuthHead";
 import AuthInfo from "@/components/auth/AuthInfo";
 import Input from "@/components/ui/Input";
-import { FormEvent } from "react";
+import { RegistrationData, ValidationErrors } from "@/types/auth";
+import { validateRegistration } from "@/utils";
+import { FormEvent, useState } from "react";
 
 const RegistrationPage = () => {
-    const handleSubmit = (e: FormEvent) => {
-        console.log(e.currentTarget);
+    const [errors, setErrors] = useState<ValidationErrors>({});
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+        const data: RegistrationData = {
+            name: formData.get("name") as string,
+            email: formData.get("email") as string,
+            password: formData.get("password") as string,
+            confirmPassword: formData.get("confirmPassword") as string,
+        };
+
+        const validationErrors = validateRegistration(data);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+        }
     };
+
     return (
         <section className="container mx-auto min-h-screen flex justify-center items-center">
             <div className="auth-card">
-                <form
-                    onSubmit={handleSubmit}
-                    className="flex flex-col gap-6"
-                    action=""
-                >
+                <AuthHead
+                    title="Create Account"
+                    subtitle="Create an account to get started  & learn seamless courses"
+                />
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     <Input
                         placeholder="name"
                         name="name"
                         id="name"
-                        type="name"
+                        type="text"
                         label="Name"
-                        required
-                        error="Hello"
+                        error={errors.name}
                     />
                     <Input
                         placeholder="email"
@@ -29,7 +49,7 @@ const RegistrationPage = () => {
                         id="email"
                         type="email"
                         label="Email"
-                        required
+                        error={errors.email}
                     />
                     <Input
                         label="Password"
@@ -37,18 +57,18 @@ const RegistrationPage = () => {
                         name="password"
                         id="password"
                         type="password"
-                        required
+                        error={errors.password}
                     />
                     <Input
                         label="Confirm Password"
                         placeholder="confirm password"
                         name="confirmPassword"
                         id="confirmPassword"
-                        type="confirmPassword"
-                        required
+                        type="password"
+                        error={errors.confirmPassword}
                     />
                     <button type="submit" className="btn-primary">
-                        Signup
+                        Create Account
                     </button>
                 </form>
                 <AuthInfo isNewUser={true} />
