@@ -1,7 +1,9 @@
-export default function Home() {
+import Hero from "@/components/home/Hero";
+
+export default function HomePage() {
     return (
         <div>
-            <h1 className="text-primary text-9xl font-semibold">UpRise</h1>
+            <Hero />
         </div>
     );
 }
