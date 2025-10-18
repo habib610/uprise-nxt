@@ -13,7 +13,7 @@ const Input = ({ label, error, id, ...rest }: InputProps) => {
         >
             <label
                 htmlFor={id}
-                className="absolute bg-white px-2 -top-2 left-3 text-sm text-gray-900"
+                className="absolute bg-white px-2 -top-3 left-3 text-sm text-gray-900"
             >
                 {label}
             </label>

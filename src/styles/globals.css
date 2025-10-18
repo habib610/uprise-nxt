@@ -15,4 +15,7 @@
     .auth-card {
         @apply md:w-[400px]  border border-gray-200  rounded-xl px-5 py-9;
     }
+    .page-main-section {
+        @apply container mx-auto min-h-screen;
+    }
 }

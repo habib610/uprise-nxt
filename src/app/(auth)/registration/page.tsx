@@ -28,7 +28,7 @@ const RegistrationPage = () => {
     };
 
     return (
-        <section className="container mx-auto min-h-screen flex justify-center items-center">
+        <section className="page-main-section  flex justify-center items-center">
             <div className="auth-card">
                 <AuthHead
                     title="Create Account"
