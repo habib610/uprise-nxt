@@ -28,7 +28,9 @@ export const validateRegistration = (
         errors.password = "Password must be at least 6 characters";
     }
 
-    if (data.confirmPassword !== data.password) {
+    if (!data.confirmPassword) {
+        errors.confirmPassword = "Confirm Password is required";
+    } else if (data.confirmPassword !== data.password) {
         errors.confirmPassword = "Passwords do not match";
     }
 

@@ -33,7 +33,7 @@ const LoginPage = () => {
                 />
                 <form
                     onSubmit={handleSubmit}
-                    className="flex flex-col gap-6"
+                    className="flex flex-col gap-8"
                     action=""
                 >
                     <Input

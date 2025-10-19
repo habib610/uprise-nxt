@@ -25,7 +25,7 @@ const Input = ({ label, error, id, ...rest }: InputProps) => {
                 {...rest}
             />
             {error && (
-                <p className="absolute bottom-[-20px] left-3 text-xs text-red-500">
+                <p className="absolute bottom-[-20px] left-3 text-xs text-red-500 ">
                     {error}
                 </p>
             )}

@@ -28,13 +28,13 @@ const RegistrationPage = () => {
     };
 
     return (
-        <section className="page-main-section  flex justify-center items-center">
+        <section className="page-main-section  flex justify-center items-center pt-10">
             <div className="auth-card">
                 <AuthHead
                     title="Create Account"
                     subtitle="Create an account to get started  & learn seamless courses"
                 />
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-8">
                     <Input
                         placeholder="name"
                         name="name"

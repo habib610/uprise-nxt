@@ -6,7 +6,7 @@
 
 @layer components {
     .btn-primary {
-        @apply bg-secondary rounded-md shadow-md hover:bg-primary hover:cursor-pointer text-white px-8 py-3 flex items-center justify-center font-medium gap-1;
+        @apply bg-secondary rounded-md shadow-md hover:bg-primary hover:cursor-pointer text-white px-6 py-2 md:px-8 md:py-3 flex items-center justify-center font-medium gap-1;
     }
     .h1 {
         @apply text-4xl md:text-5xl  lg:text-7xl font-bold;

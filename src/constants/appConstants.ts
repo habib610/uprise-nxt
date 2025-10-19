@@ -6,6 +6,8 @@ export const COURSES: string = "/courses";
 export const LOGIN: string = "/login";
 export const REGISTRATION: string = "/registration";
 
+export const HOST: string = process.env.PROD_URI ?? `http://localhost.3000`;
+
 export const NAV_LINKS: NavLink[] = [
     {
         id: 1,
