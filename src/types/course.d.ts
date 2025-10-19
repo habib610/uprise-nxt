@@ -16,3 +16,5 @@ export interface CoursesDataType {
     duration: number;
     rating: number;
 }
+
+export type CourseTagType = { value: number | string; icon?: IconType };

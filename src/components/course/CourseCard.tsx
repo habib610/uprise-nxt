@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GiRoundStar } from "react-icons/gi";
 import { IoMdClock } from "react-icons/io";
+import CoursePrice from "./CoursePrice";
 
 const CourseCard = ({
     id,
@@ -15,19 +16,6 @@ const CourseCard = ({
     price,
     discount,
 }: CoursesDataType) => {
-    const getPrice = (price: number, discount: number): JSX.Element => {
-        const finalPrice: number = discount
-            ? price - (price * discount) / 100
-            : price;
-        return (
-            <div className="flex items-center gap-2">
-                {discount > 0 && (
-                    <p className="line-through text-gray-400">${price}</p>
-                )}
-                <p className="text-primary font-bold text-xl">${finalPrice}</p>
-            </div>
-        );
-    };
     return (
         <div className="border border-gray-200 rounded-2xl  max-w-[400px] hover:scale-105 duration-500">
             <div className="h-[200px] relative">
@@ -69,7 +57,7 @@ const CourseCard = ({
                             </p>
                         </div>
                     </div>
-                    {getPrice(price, discount)}
+                    <CoursePrice price={price} discount={discount} />
                 </div>
             </div>
         </div>
