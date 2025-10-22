@@ -1,8 +1,8 @@
 import { ROLE, TABLES } from "@/constants/dbConstants";
-import { UserType } from "@/types/user";
+import { UserSchemaType } from "@/types/schema";
 import mongoose, { Model, Schema } from "mongoose";
 
-const userSchema = new Schema<UserType>(
+const userSchema = new Schema<UserSchemaType>(
     {
         name: {
             type: String,
@@ -51,5 +51,5 @@ const userSchema = new Schema<UserType>(
     }
 );
 
-export const userModel: Model<UserType> =
+export const userModel: Model<UserSchemaType> =
     mongoose.models[TABLES.USER] || mongoose.model(TABLES.USER, userSchema);
