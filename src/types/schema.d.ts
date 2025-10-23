@@ -21,7 +21,7 @@ export interface CourseSchemaType extends Document {
     price: number;
     discount: number;
     duration: number;
-    rating: number;
+    rating: mongoose.Schema.Types.ObjectId;
     updatedAt: Date;
 }
 
@@ -29,4 +29,11 @@ export interface ReferralSchemaType {
     referrer: mongoose.Schema.Types.ObjectId;
     referred?: mongoose.Schema.Types.ObjectId;
     isConverted: boolean;
+}
+
+export interface RatingSchemaType {
+    user: mongoose.Schema.Types.ObjectId;
+    description: string;
+    rate: number;
+    course: mongoose.Schema.Types.ObjectId;
 }

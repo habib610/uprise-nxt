@@ -26,4 +26,4 @@ const referralSchema = new Schema<ReferralSchemaType>(
 
 export const referralModel: Model<ReferralSchemaType> =
     mongoose.models[TABLES.REFERRAL] ??
-    mongoose.model(TABLES.REFERRAL, referralSchema);
+    mongoose.model<ReferralSchemaType>(TABLES.REFERRAL, referralSchema);

@@ -37,14 +37,15 @@ const courseSchema = new Schema<CourseSchemaType>(
             type: Number,
             required: true,
         },
-        updatedAt: {
-            type: Date,
-            required: true,
-            default: Date.now,
-        },
         instructor: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: TABLES.USER,
+        },
+        rating: {
+            ref: TABLES.RATING,
+            type: mongoose.Schema.Types.ObjectId,
+            default: null,
         },
     },
     {

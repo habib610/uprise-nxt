@@ -7,6 +7,16 @@ import { UserSchemaType } from "@/types/schema";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
+export const GET = async () => {
+    const users = await userModel.find().lean();
+
+    return NextResponse.json(
+        { success: true, data: users },
+        {
+            status: 200,
+        }
+    );
+};
 export const POST = async (req: Request) => {
     const body = await req.json();
 
@@ -60,7 +70,7 @@ export const POST = async (req: Request) => {
             email: body.email,
             password: body.password,
             referralCode: newUserReferralCode,
-            referredBy: referredUserId,
+            avatar: body?.avatar || null,
         };
 
         const newUser: UserSchemaType = await userModel.create({

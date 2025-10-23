@@ -1,31 +1,36 @@
+import { TABLES } from "@/constants/dbConstants";
+import { courseModel } from "@/model/course-model";
+import { userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export const GET = async (req: Request) => {
+export const GET = async () => {
     try {
-        console.log(req.body);
-        await connectMongoDB();
+        const connection = await connectMongoDB();
+        if (!connection.models[TABLES.USER]) {
+            mongoose.model(TABLES.USER, userSchema);
+        }
 
-        return new NextResponse("User Has been created", {
-            status: 201,
-        });
+        const courses = await courseModel
+            .find()
+            .populate("instructor", "name email avatar");
+        return NextResponse.json(
+            {
+                success: true,
+                data: courses,
+            },
+            {
+                status: 201,
+            }
+        );
     } catch (error) {
-        if (error instanceof Error) console.error("Error fetching users:");
-
-        return new Response("Something went wrong", { status: 500 });
-    }
-};
-
-export const POST = async (req: Request) => {
-    try {
-        console.log(req.body);
-        await connectMongoDB();
-
-        return new NextResponse("User Has been created", {
-            status: 201,
-        });
-    } catch (error) {
-        if (error instanceof Error) console.error("Error fetching users:");
+        if (error instanceof Error) {
+            return NextResponse.json(
+                { success: true, message: error.message },
+                { status: 500 }
+            );
+        }
 
         return new Response("Something went wrong", { status: 500 });
     }
