@@ -26,6 +26,7 @@ const userSchema = new Schema<UserSchemaType>(
         referralCode: {
             type: String,
             required: true,
+            unique: true,
         },
         referredBy: {
             type: mongoose.Schema.Types.ObjectId,
@@ -40,10 +41,6 @@ const userSchema = new Schema<UserSchemaType>(
             type: String,
             enum: [ROLE.USER, ROLE.INSTRUCTOR],
             default: ROLE.USER,
-        },
-        isReferralEligible: {
-            type: Boolean,
-            default: false,
         },
     },
     {

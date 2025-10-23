@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { InputHTMLAttributes } from "react";
 
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
@@ -22,3 +23,11 @@ export type AuthHeadData = {
     title: string;
     subtitle: string;
 };
+
+export interface NewUserType extends EmailAndPasswordData {
+    name: string;
+    referralCode?: string;
+    referredBy?: mongoose.Schema.Types.ObjectId;
+    avatar?: string;
+    role?: string;
+}

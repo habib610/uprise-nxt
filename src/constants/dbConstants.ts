@@ -3,6 +3,7 @@ export const TABLES = {
     RATING: "Rating",
     COURSE: "Course",
     ENROLLMENT: "Enrollment",
+    REFERRAL: "Referral",
 };
 
 export const ROLE = {

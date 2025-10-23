@@ -8,7 +8,6 @@ export interface UserSchemaType extends Document {
     referredBy?: mongoose.Schema.Types.ObjectId;
     avatar?: string;
     role: string;
-    isReferralEligible: boolean;
 }
 
 export interface CourseSchemaType extends Document {
@@ -24,4 +23,10 @@ export interface CourseSchemaType extends Document {
     duration: number;
     rating: number;
     updatedAt: Date;
+}
+
+export interface ReferralSchemaType {
+    referrer: mongoose.Schema.Types.ObjectId;
+    referred?: mongoose.Schema.Types.ObjectId;
+    isConverted: boolean;
 }
