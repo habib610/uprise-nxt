@@ -2,7 +2,7 @@ import { TABLES } from "@/constants/dbConstants";
 import { CourseSchemaType } from "@/types/schema";
 import mongoose, { Model, Schema } from "mongoose";
 
-const courseSchema = new Schema<CourseSchemaType>(
+export const courseSchema = new Schema<CourseSchemaType>(
     {
         title: {
             type: String,
@@ -46,6 +46,7 @@ const courseSchema = new Schema<CourseSchemaType>(
             ref: TABLES.RATING,
             type: mongoose.Schema.Types.ObjectId,
             default: null,
+            required: true,
         },
     },
     {

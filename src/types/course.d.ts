@@ -2,6 +2,21 @@ export interface InstructorType {
     name: string;
     avatar?: string;
 }
+
+export type Rating = {
+    rate: number | null;
+};
+
+export interface CoursesCardDataType {
+    id: string;
+    title: string;
+    category: string;
+    thumbnail: string;
+    price: number;
+    discount?: number;
+    duration: number;
+    rating?: Rating;
+}
 export interface CoursesDataType {
     id: string;
     title: string;

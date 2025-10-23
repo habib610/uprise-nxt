@@ -1,5 +1,5 @@
 import { COURSES } from "@/constants/appConstants";
-import { CoursesDataType } from "@/types/course";
+import { CoursesCardDataType } from "@/types/course";
 import Image from "next/image";
 import Link from "next/link";
 import { GiRoundStar } from "react-icons/gi";
@@ -15,7 +15,7 @@ const CourseCard = ({
     duration,
     price,
     discount,
-}: CoursesDataType) => {
+}: CoursesCardDataType) => {
     return (
         <div className="border border-gray-200 rounded-2xl  max-w-[400px] hover:scale-105 duration-500">
             <div className="h-[200px] relative">
@@ -38,15 +38,18 @@ const CourseCard = ({
                 </p>
                 <div className="flex justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <GiRoundStar
-                                className="text-yellow-400"
-                                size={22}
-                            />
-                            <p className="text-slate-500 font-medium">
-                                <span>{rating}</span>
-                            </p>
-                        </div>
+                        {rating?.rate && (
+                            <div className="flex items-center gap-2">
+                                <GiRoundStar
+                                    className="text-yellow-400"
+                                    size={22}
+                                />
+                                <p className="text-slate-500 font-medium">
+                                    <span>{rating?.rate}</span>
+                                </p>
+                            </div>
+                        )}
+
                         <div className="flex items-center gap-2">
                             <IoMdClock className="text-teal-500" size={22} />
                             <p className="text-slate-400 ">
@@ -57,7 +60,7 @@ const CourseCard = ({
                             </p>
                         </div>
                     </div>
-                    <CoursePrice price={price} discount={discount} />
+                    <CoursePrice price={price} discount={discount || 0} />
                 </div>
             </div>
         </div>

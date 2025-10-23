@@ -2,7 +2,7 @@ import { TABLES } from "@/constants/dbConstants";
 import { RatingSchemaType } from "@/types/schema";
 import mongoose, { Model, Schema } from "mongoose";
 
-const ratingSchema = new Schema<RatingSchemaType>(
+export const ratingSchema = new Schema<RatingSchemaType>(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +30,6 @@ const ratingSchema = new Schema<RatingSchemaType>(
     }
 );
 
-export const referralModel: Model<RatingSchemaType> =
+export const ratingModel: Model<RatingSchemaType> =
     mongoose.models[TABLES.RATING] ??
     mongoose.model<RatingSchemaType>(TABLES.RATING, ratingSchema);

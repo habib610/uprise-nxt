@@ -1,7 +1,21 @@
 import CourseCard from "@/components/course/CourseCard";
-import { courses } from "@/databases/seed/courses-db";
+import { COURSE_API_ENDPOINT } from "@/constants/appConstants";
+import { CoursesCardDataType } from "@/types/course";
 
-const CoursePage = () => {
+const CoursePage = async () => {
+    const res = await fetch(COURSE_API_ENDPOINT, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        cache: "no-store",
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch courses");
+    }
+    const { courses }: { courses: CoursesCardDataType[] } = await res.json();
+
     return (
         <section className="page-main-section mt-30 px-5 lg:px-0 ">
             <div className=" mb-8">

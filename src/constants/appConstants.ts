@@ -1,12 +1,20 @@
 import { NavLink } from "@/types/app";
-
+export const isProdEnv = process.env.NODE_ENV === "production";
 export const HOME: string = "/";
 export const DASHBOARD: string = "/dashboard";
 export const COURSES: string = "/courses";
 export const LOGIN: string = "/login";
 export const REGISTRATION: string = "/registration";
 
-export const HOST: string = process.env.PROD_URI ?? `http://localhost.3000`;
+export const HOST = (
+    isProdEnv ? process.env.BASE_PROD_URI : process.env.BASE_DEV_URI
+) as string;
+
+export const API_URI = (
+    isProdEnv
+        ? process.env.NEXT_PUBLIC_SITE_URI_PROD
+        : process.env.NEXT_PUBLIC_SITE_URI_DEV
+) as string;
 
 export const NAV_LINKS: NavLink[] = [
     {
@@ -20,3 +28,5 @@ export const NAV_LINKS: NavLink[] = [
         path: COURSES,
     },
 ];
+
+export const COURSE_API_ENDPOINT = `${API_URI}/course`;

@@ -1,6 +1,6 @@
 import { TABLES } from "@/constants/dbConstants";
-import { courseModel } from "@/model/course-model";
-import { userSchema } from "@/model/user-model";
+import { courseModel, courseSchema } from "@/model/course-model";
+import { ratingSchema } from "@/model/rating-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
@@ -8,20 +8,22 @@ import { NextResponse } from "next/server";
 export const GET = async () => {
     try {
         const connection = await connectMongoDB();
-        if (!connection.models[TABLES.USER]) {
-            mongoose.model(TABLES.USER, userSchema);
+
+        if (!connection.models[TABLES.COURSE]) {
+            mongoose.model(TABLES.COURSE, courseSchema);
         }
 
-        const courses = await courseModel
-            .find()
-            .populate("instructor", "name email avatar");
+        if (!connection.models[TABLES.RATING]) {
+            mongoose.model(TABLES.RATING, ratingSchema);
+        }
+        const courses = await courseModel.find().populate("rating", "rate");
         return NextResponse.json(
             {
                 success: true,
-                data: courses,
+                courses: courses,
             },
             {
-                status: 201,
+                status: 200,
             }
         );
     } catch (error) {
