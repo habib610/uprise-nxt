@@ -4,6 +4,7 @@ import { userModel } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import { NewUserType } from "@/types/auth";
 import { UserSchemaType } from "@/types/schema";
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -64,11 +65,12 @@ export const POST = async (req: Request) => {
             newUserReferralCode = generateReferralCode(body.name);
         }
 
-        /* @TODO => Convert to hashed password @habib610 Thu October 23,2025 */
+        const hashedPassword: string = await bcrypt.hash(body.password, 5);
+
         const user: NewUserType = {
             name: body.name,
             email: body.email,
-            password: body.password,
+            password: hashedPassword,
             referralCode: newUserReferralCode,
             avatar: body?.avatar || null,
         };
@@ -80,14 +82,24 @@ export const POST = async (req: Request) => {
 
         if (referredUserId) {
             await referralModel.create({
-                isConverted: false,
+                isPurchased: false,
                 referred: newUser._id,
                 referrer: referredUserId,
             });
         }
 
         return NextResponse.json(
-            { success: true, user: newUser },
+            {
+                success: true,
+                user: {
+                    _id: newUser._id,
+                    referralCode: newUser.referralCode,
+                    name: newUser.name,
+                    email: newUser.email,
+                    role: newUser.role,
+                    avatar: newUser.avatar,
+                },
+            },
             {
                 status: 201,
             }
