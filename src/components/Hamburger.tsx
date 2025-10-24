@@ -1,12 +1,20 @@
 "use client";
 
-import { NAV_LINKS } from "@/constants/appConstants";
+import { LOGIN, NAV_LINKS } from "@/constants/appConstants";
 import { AnimatePresence, motion } from "framer-motion";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Hamburger = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const { data: session } = useSession();
+
+    const [loginSession, setLoginSession] = useState<unknown>(null);
+
+    useEffect(() => {
+        setLoginSession(session);
+    }, [session]);
 
     return (
         <>
@@ -68,6 +76,32 @@ const Hamburger = () => {
                                     </Link>
                                 </motion.div>
                             ))}
+                            <motion.div
+                                initial={{ x: -20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                exit={{ x: -20, opacity: 0 }}
+                                transition={{
+                                    delay: 4 * 0.1,
+                                    duration: 0.3,
+                                }}
+                            >
+                                {!loginSession ? (
+                                    <Link
+                                        href={LOGIN}
+                                        className="btn-primary mx-4 mb-4"
+                                    >
+                                        Login
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        href="#"
+                                        onClick={() => signOut()}
+                                        className="btn-primary bg-transparent text-secondary border border-secondary  mx-4 mb-4"
+                                    >
+                                        Logout
+                                    </Link>
+                                )}
+                            </motion.div>
                         </nav>
                     </motion.div>
                 )}
