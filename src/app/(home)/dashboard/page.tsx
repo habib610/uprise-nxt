@@ -1,10 +1,14 @@
 import CreditCard from "@/components/dashboard/CreditCard";
 import DashboardHead from "@/components/dashboard/DashboardHead";
 import { getUserDashboardInfo } from "@/lib/api/dasboard";
+import { checkAuth } from "@/lib/auth";
 import { DashboardInfoType } from "@/types/dashboard";
 
 const DashboardPage = async () => {
+    await checkAuth();
+
     const data: DashboardInfoType = await getUserDashboardInfo();
+
     return (
         <section className="min-h-screen pt-25 pb-8 lg:pt-30">
             <div className="container mx-auto px-4 lg:px-0">

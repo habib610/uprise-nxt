@@ -1,5 +1,6 @@
 import { COURSES } from "@/constants/appConstants";
 import { getCourseById } from "@/lib/api/course";
+import { checkAuth } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
 import { CoursesDataType, EnrollSuccessParams } from "@/types/course";
 import Link from "next/link";
@@ -8,8 +9,8 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 const EnrollSuccessPage = async ({
     searchParams: { session_id, courseId },
 }: EnrollSuccessParams) => {
-    console.log(courseId);
-    console.log(session_id);
+    await checkAuth();
+
     if (!session_id) {
         throw new Error("Session id is invalid");
     }
