@@ -13,7 +13,7 @@ const referralSchema = new Schema<ReferralSchemaType>(
             ref: TABLES.USER,
             unique: true,
         },
-        isConverted: {
+        isPurchased: {
             type: Boolean,
             required: true,
             default: false,

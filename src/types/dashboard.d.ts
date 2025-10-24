@@ -7,3 +7,10 @@ export type CreditCardType = {
     subTitle: string;
     className?: string;
 };
+
+export type DashboardInfoType = {
+    totalReferred: number;
+    earnedCredit: number;
+    pendingCredit: number;
+    purchasedUser: number;
+};

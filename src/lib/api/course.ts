@@ -1,5 +1,24 @@
 import { COURSE_API_ENDPOINT } from "@/constants/appConstants";
-import { CoursesDataType } from "@/types/course";
+import { CoursesCardDataType, CoursesDataType } from "@/types/course";
+
+export const getAllCourses = async (): Promise<CoursesCardDataType[]> => {
+    const res = await fetch(COURSE_API_ENDPOINT, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        cache: "no-store",
+    });
+
+    if (!res.ok) {
+        const result = await res.json();
+        const message = result?.message || `No courses available at the moment`;
+        throw new Error(message);
+    }
+
+    const { data }: { data: CoursesCardDataType[] } = await res.json();
+    return data;
+};
 
 export const getCourseById = async (
     courseId: string
@@ -24,6 +43,6 @@ export const getCourseById = async (
         throw new Error(message);
     }
 
-    const { course }: { course: CoursesDataType } = await res.json();
-    return course;
+    const { data }: { data: CoursesDataType } = await res.json();
+    return data;
 };

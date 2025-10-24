@@ -33,7 +33,7 @@ export const GET = async () => {
         return NextResponse.json(
             {
                 success: true,
-                courses: courses,
+                data: courses,
             },
             {
                 status: 200,

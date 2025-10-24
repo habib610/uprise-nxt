@@ -1,18 +1,13 @@
 import { TABLES } from "@/constants/dbConstants";
-import { courseModel, courseSchema } from "@/model/course-model";
+import { courseSchema } from "@/model/course-model";
 import { ratingSchema } from "@/model/rating-model";
+import { referralModel } from "@/model/referral-model";
 import { userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-type Params = {
-    params: {
-        courseId: string;
-    };
-};
-
-export const GET = async (req: Request, { params }: Params) => {
+export const GET = async () => {
     try {
         const connection = await connectMongoDB();
 
@@ -28,15 +23,27 @@ export const GET = async (req: Request, { params }: Params) => {
             mongoose.model(TABLES.USER, userSchema);
         }
 
-        const course = await courseModel
-            .findById(params.courseId)
-            .populate("rating", "rate")
-            .populate("instructor", "name email avatar");
+        /* @TODO => Read from auth session @habib610 Fri October 24,2025 */
+        const totalUser = await referralModel
+            .find({
+                referrer: `68fa3c5456274be2af95e29b`,
+            })
+            .select(["isPurchased"]);
+        const totalReferred = totalUser.length;
+        const purchasedUser = totalUser.reduce(
+            (prev, user) => (user.isPurchased ? prev + 1 : prev),
+            0
+        );
 
         return NextResponse.json(
             {
                 success: true,
-                data: course,
+                data: {
+                    totalReferred: totalReferred,
+                    earnedCredit: purchasedUser * 2,
+                    pendingCredit: (totalReferred - purchasedUser) * 2,
+                    purchasedUser: totalReferred - purchasedUser,
+                },
             },
             {
                 status: 200,
@@ -48,7 +55,7 @@ export const GET = async (req: Request, { params }: Params) => {
         }
         console.error(error);
         return Response.json(
-            { success: false, message: "Course not found" },
+            { success: false, message: "User Info not found" },
             { status: 404 }
         );
     }

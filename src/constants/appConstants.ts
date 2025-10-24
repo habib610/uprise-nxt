@@ -30,3 +30,4 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 export const COURSE_API_ENDPOINT = `${API_URI}/course`;
+export const DASHBOARD_INFO_API_ENDPOINT = `${API_URI}/dashboard`;

@@ -28,7 +28,7 @@ export interface CourseSchemaType extends Document {
 export interface ReferralSchemaType {
     referrer: mongoose.Schema.Types.ObjectId;
     referred?: mongoose.Schema.Types.ObjectId;
-    isConverted: boolean;
+    isPurchased: boolean;
 }
 
 export interface RatingSchemaType {
