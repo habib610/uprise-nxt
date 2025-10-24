@@ -1,7 +1,10 @@
 import CourseCard from "@/components/course/CourseCard";
-import { courses } from "@/databases/seed/courses-db";
+import { getAllCourses } from "@/lib/api/course";
+import { CoursesCardDataType } from "@/types/course";
 
-const CoursePage = () => {
+const CoursePage = async () => {
+    const courses: CoursesCardDataType[] = await getAllCourses();
+
     return (
         <section className="page-main-section mt-30 px-5 lg:px-0 ">
             <div className=" mb-8">
@@ -15,7 +18,7 @@ const CoursePage = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-9 lg:gap-y-12 md:gap-x-6  xl:gap-x-7 2xl:gap-x-8 items-center place-items-center ">
                 {courses.map((course) => (
-                    <CourseCard key={course.id} {...course} />
+                    <CourseCard key={course._id} {...course} />
                 ))}
             </div>
         </section>

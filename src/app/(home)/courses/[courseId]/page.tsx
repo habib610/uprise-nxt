@@ -2,18 +2,16 @@ import CourseInstructor from "@/components/course/CourseInstructor";
 import CoursePayment from "@/components/course/CoursePayment";
 import CoursePrice from "@/components/course/CoursePrice";
 import CourseTag from "@/components/course/CourseTag";
-import { courses } from "@/databases/seed/courses-db";
-import { CoursesDataType } from "@/types/course";
+import { getCourseFinalPrice } from "@/helpers";
+import { getCourseById } from "@/lib/api/course";
+import { CoursesDataType, Params } from "@/types/course";
 import Image from "next/image";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
 
-const CourseDetailsPage = () => {
-    /* @TODO => this will be come from api @habib610 Sun October 19,2025 */
-
-    const courseDetails: CoursesDataType = courses[0];
+const CourseDetailsPage = async ({ params }: Params) => {
+    const courseDetails: CoursesDataType = await getCourseById(params.courseId);
     const courseDescriptions: string[] = courseDetails.description.split("\n");
-
     return (
         <section className="min-h-screen pt-25 lg:pt-30 pb-4 lg:pb-8">
             <div className="container px-4 lg:px-6 mx-auto max-w-[900px]">
@@ -31,10 +29,12 @@ const CourseDetailsPage = () => {
                             <CourseTag
                                 icon={AiOutlineClockCircle}
                                 value={courseDetails.duration}
+                                subtitle={"Hours"}
                             />
                             <CourseTag
                                 icon={IoEyeOutline}
-                                value={courseDetails.enrolled}
+                                value={courseDetails.enrolled || 0}
+                                subtitle={"Enrolled"}
                             />
                         </div>
 
@@ -63,11 +63,19 @@ const CourseDetailsPage = () => {
                         </p>
                     ))}
 
-                    <CoursePayment />
+                    <CoursePayment
+                        courseId={params.courseId}
+                        title={courseDetails.title}
+                        price={getCourseFinalPrice(
+                            courseDetails.price,
+                            courseDetails.discount
+                        )}
+                    />
 
                     <CourseInstructor
                         name={courseDetails.instructor.name}
                         avatar={courseDetails.instructor.avatar}
+                        email={courseDetails.instructor.email}
                     />
                 </div>
             </div>

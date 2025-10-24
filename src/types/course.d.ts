@@ -1,6 +1,22 @@
 export interface InstructorType {
     name: string;
     avatar?: string;
+    email?: string;
+}
+
+export type Rating = {
+    rate: number | null;
+};
+
+export interface CoursesCardDataType {
+    _id: string;
+    title: string;
+    category: string;
+    thumbnail: string;
+    price: number;
+    discount?: number;
+    duration: number;
+    rating?: Rating;
 }
 export interface CoursesDataType {
     id: string;
@@ -17,4 +33,21 @@ export interface CoursesDataType {
     rating: number;
 }
 
-export type CourseTagType = { value: number | string; icon?: IconType };
+export type CourseTagType = {
+    value: number | string;
+    icon?: IconType;
+    subtitle?: string;
+};
+
+export type Params = {
+    params: {
+        courseId: string;
+    };
+};
+
+export type EnrollSuccessParams = {
+    searchParams: {
+        session_id: string;
+        courseId: string;
+    };
+};

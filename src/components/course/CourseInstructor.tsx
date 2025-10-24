@@ -1,7 +1,7 @@
 import { InstructorType } from "@/types/course";
 import Image from "next/image";
 
-const CourseInstructor = ({ name, avatar }: InstructorType) => {
+const CourseInstructor = ({ name, avatar, email }: InstructorType) => {
     return (
         <div className="mt-9">
             <h3 className="font-bold mb-3 text-xl text-gray-700 ">
@@ -22,7 +22,10 @@ const CourseInstructor = ({ name, avatar }: InstructorType) => {
                         </p>
                     )}
                 </div>
-                <p className="text-primary">{name}</p>
+                <div>
+                    <p className="text-primary text-lg font-medium">{name}</p>
+                    <p className="underline text-sm ">{email}</p>
+                </div>
             </div>
         </div>
     );

@@ -4,8 +4,12 @@ import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 const CURRENCY: string = "USD";
 
-export async function createCheckoutSession() {
+export async function createCheckoutSession(data: FormData) {
     const ui_mode: string = "hosted";
+
+    const courseId = (data.get("courseId") || "") as string;
+    const title = (data.get("title") || "") as string;
+    const price = (data.get("price") || 0) as number;
 
     const origin: string = headers().get("origin") || "";
 
@@ -18,15 +22,15 @@ export async function createCheckoutSession() {
                 price_data: {
                     currency: CURRENCY,
                     product_data: {
-                        name: "Amazon ",
+                        name: title,
                     },
-                    unit_amount: 12.23 * 100,
+                    unit_amount: price * 100,
                 },
             },
         ],
 
         ...(ui_mode === "hosted" && {
-            success_url: `${origin}/enroll-success?session_id={CHECKOUT_SESSION_ID}&courseId=${4}`,
+            success_url: `${origin}/enroll-success?session_id={CHECKOUT_SESSION_ID}&courseId=${courseId}`,
             cancel_url: `${origin}/courses`,
         }),
         ui_mode: "hosted",
@@ -38,9 +42,10 @@ export async function createCheckoutSession() {
     };
 }
 
-export async function createPaymentIntent() {
+export async function createPaymentIntent(data: FormData) {
+    const price: number = (data.get("price") || 0) as number;
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: 12.23 * 100,
+        amount: price * 100,
         automatic_payment_methods: { enabled: true },
         currency: CURRENCY,
     });
