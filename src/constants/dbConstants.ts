@@ -1,9 +1,9 @@
 export const TABLES = {
-    USER: "user",
-    RATING: "rating",
-    COURSE: "course",
-    ENROLLMENT: "enrollment",
-    REFERRAL: "referral",
+    USER: "users",
+    RATING: "ratings",
+    COURSE: "courses",
+    ENROLLMENT: "enrollments",
+    REFERRAL: "referrals",
 };
 
 export const ROLE = {

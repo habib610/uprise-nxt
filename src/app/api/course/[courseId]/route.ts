@@ -1,11 +1,18 @@
 import { TABLES } from "@/constants/dbConstants";
 import { courseModel, courseSchema } from "@/model/course-model";
 import { ratingSchema } from "@/model/rating-model";
+import { userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export const GET = async () => {
+type Params = {
+    params: {
+        courseId: string;
+    };
+};
+
+export const GET = async (req: Request, { params }: Params) => {
     try {
         const connection = await connectMongoDB();
 
@@ -17,23 +24,19 @@ export const GET = async () => {
             mongoose.model(TABLES.RATING, ratingSchema);
         }
 
-        const courses = await courseModel
-            .find()
-            .select([
-                "_id",
-                "title",
-                "category",
-                "thumbnail",
-                "price",
-                "discount",
-                "duration",
-                "rating",
-            ])
-            .populate("rating", "rate");
+        if (!connection.models[TABLES.USER]) {
+            mongoose.model(TABLES.USER, userSchema);
+        }
+
+        const course = await courseModel
+            .findById(params.courseId)
+            .populate("rating", "rate")
+            .populate("instructor", "name email avatar");
+
         return NextResponse.json(
             {
                 success: true,
-                courses: courses,
+                course: course,
             },
             {
                 status: 200,
@@ -41,12 +44,12 @@ export const GET = async () => {
         );
     } catch (error) {
         if (error instanceof Error) {
-            return NextResponse.json(
-                { success: true, message: error.message },
-                { status: 500 }
-            );
+            console.error(error.message);
         }
-
-        return new Response("Something went wrong", { status: 500 });
+        console.error(error);
+        return Response.json(
+            { success: false, message: "Course not found" },
+            { status: 404 }
+        );
     }
 };

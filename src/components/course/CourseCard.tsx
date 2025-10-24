@@ -7,7 +7,7 @@ import { IoMdClock } from "react-icons/io";
 import CoursePrice from "./CoursePrice";
 
 const CourseCard = ({
-    id,
+    _id,
     thumbnail,
     category,
     title,
@@ -27,7 +27,7 @@ const CourseCard = ({
                 />
             </div>
             <div className="px-2 pt-5 pb-3">
-                <Link href={`${COURSES}/${id}`}>
+                <Link href={`${COURSES}/${_id}`}>
                     <h3 className="line-clamp-2  text-xl text-blue-900 font-medium mb-4 hover:text-blue-700">
                         {title}
                     </h3>
