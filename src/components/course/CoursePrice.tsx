@@ -1,3 +1,4 @@
+import { getCourseFinalPrice } from "@/helpers";
 import cn from "@/lib/cn";
 
 const CoursePrice = ({
@@ -9,9 +10,7 @@ const CoursePrice = ({
     discount: number;
     className?: string;
 }) => {
-    const finalPrice: number = discount
-        ? price - (price * discount) / 100
-        : price;
+    const finalPrice: number = getCourseFinalPrice(price, discount);
 
     return (
         <div className={cn("flex items-center gap-2 text-xl", className)}>

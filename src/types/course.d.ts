@@ -44,3 +44,10 @@ export type Params = {
         courseId: string;
     };
 };
+
+export type EnrollSuccessParams = {
+    searchParams: {
+        session_id: string;
+        courseId: string;
+    };
+};

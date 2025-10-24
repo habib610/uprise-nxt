@@ -2,6 +2,7 @@ import CourseInstructor from "@/components/course/CourseInstructor";
 import CoursePayment from "@/components/course/CoursePayment";
 import CoursePrice from "@/components/course/CoursePrice";
 import CourseTag from "@/components/course/CourseTag";
+import { getCourseFinalPrice } from "@/helpers";
 import { getCourseById } from "@/lib/api/course";
 import { CoursesDataType, Params } from "@/types/course";
 import Image from "next/image";
@@ -62,7 +63,14 @@ const CourseDetailsPage = async ({ params }: Params) => {
                         </p>
                     ))}
 
-                    <CoursePayment />
+                    <CoursePayment
+                        courseId={params.courseId}
+                        title={courseDetails.title}
+                        price={getCourseFinalPrice(
+                            courseDetails.price,
+                            courseDetails.discount
+                        )}
+                    />
 
                     <CourseInstructor
                         name={courseDetails.instructor.name}
