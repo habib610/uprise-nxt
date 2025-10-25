@@ -25,12 +25,12 @@ const LoginForm = () => {
                 email: formData.get("email") as string,
                 password: formData.get("password") as string,
             };
-            setLoading(true);
 
             const validationErrors = validateLogin(data);
             setErrors(validationErrors);
 
             if (Object.keys(validationErrors).length === 0) {
+                setLoading(true);
                 const response = await loginWithEmailAndPassword(formData);
                 setLoading(false);
                 if (!!response.error) {

@@ -28,7 +28,7 @@ const CoursePayment = ({
             <input type="hidden" name="courseId" value={courseId} />
             <input type="hidden" name="price" value={price} />
             <input type="hidden" name="title" value={title} />
-            <button type="submit" className="btn-primary w-full md:w-3/5">
+            <button type="submit" className="btn-primary w-full ">
                 Get Now <BsArrowRight size={24} />
             </button>
         </form>

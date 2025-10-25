@@ -1,39 +1,16 @@
-import { TABLES } from "@/constants/dbConstants";
-import { courseModel, courseSchema } from "@/model/course-model";
-import { enrollmentModel, enrollmentSchema } from "@/model/enrollment-model";
-import { ratingSchema } from "@/model/rating-model";
-import { referralModel, referralSchema } from "@/model/referral-model";
-import { userModel, userSchema } from "@/model/user-model";
+import { courseModel } from "@/model/course-model";
+import { enrollmentModel } from "@/model/enrollment-model";
+import { referralModel } from "@/model/referral-model";
+import { userModel } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import { CheckoutType } from "@/types/checkout";
-import mongoose from "mongoose";
 import { auth } from "../../../auth";
 
 export const completeCourseEnrollment = async (body: CheckoutType) => {
     try {
         const session = await auth();
-        const connection = await connectMongoDB();
+        await connectMongoDB();
         if (!session?.user?.email) throw new Error("You are not authorized");
-
-        if (!connection.models[TABLES.COURSE]) {
-            mongoose.model(TABLES.COURSE, courseSchema);
-        }
-
-        if (!connection.models[TABLES.RATING]) {
-            mongoose.model(TABLES.RATING, ratingSchema);
-        }
-
-        if (!connection.models[TABLES.USER]) {
-            mongoose.model(TABLES.USER, userSchema);
-        }
-
-        if (!connection.models[TABLES.REFERRAL]) {
-            mongoose.model(TABLES.REFERRAL, referralSchema);
-        }
-
-        if (!connection.models[TABLES.ENROLLMENT]) {
-            mongoose.model(TABLES.ENROLLMENT, enrollmentSchema);
-        }
 
         const user = await userModel.findOne({ email: session?.user?.email });
         if (!user) throw new Error("User not found");
