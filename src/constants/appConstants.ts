@@ -35,3 +35,4 @@ export const COURSE_API_ENDPOINT = `${API_URI}/course`;
 export const DASHBOARD_INFO_API_ENDPOINT = `${API_URI}/dashboard`;
 export const REGISTRATION_API_ENDPOINT = `${API_URI}/auth/registration`;
 export const LOGIN_API_ENDPOINT = `${API_URI}/auth/login`;
+export const CHECKOUT_API_ENDPOINT = `${API_URI}/checkout`;

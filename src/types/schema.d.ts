@@ -8,6 +8,7 @@ export interface UserSchemaType extends Document {
     referredBy?: mongoose.Schema.Types.ObjectId;
     avatar?: string;
     role: string;
+    credit: number;
 }
 
 export interface CourseSchemaType extends Document {
@@ -42,6 +43,8 @@ export interface EnrollmentSchemaType {
     enrolledDate: Date;
     status: string;
     method: string;
+    paymentType: string;
+    amount: number | null;
     user: mongoose.Schema.Types.ObjectId;
     course: mongoose.Schema.Types.ObjectId;
 }

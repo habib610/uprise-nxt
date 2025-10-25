@@ -2,7 +2,7 @@ import { TABLES } from "@/constants/dbConstants";
 import { ReferralSchemaType } from "@/types/schema";
 import mongoose, { Model, Schema } from "mongoose";
 
-const referralSchema = new Schema<ReferralSchemaType>(
+export const referralSchema = new Schema<ReferralSchemaType>(
     {
         referrer: {
             type: mongoose.Schema.Types.ObjectId,

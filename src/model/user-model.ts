@@ -42,6 +42,11 @@ export const userSchema = new Schema<UserSchemaType>(
             enum: [ROLE.USER, ROLE.INSTRUCTOR],
             default: ROLE.USER,
         },
+        credit: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     },
     {
         timestamps: true,

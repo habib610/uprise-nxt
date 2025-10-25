@@ -14,6 +14,7 @@ import Logout from "./auth/Logout";
 
 const Navbar = async ({ authPage }: { authPage: boolean }) => {
     const session = await auth();
+    console.log(session);
 
     const links = session ? [...NAV_LINKS, ...NAV_PROTECTED_LINKS] : NAV_LINKS;
 

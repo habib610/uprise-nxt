@@ -7,4 +7,5 @@ export const checkAuth = async () => {
     if (!session?.user) {
         redirect(LOGIN);
     }
+    return session;
 };

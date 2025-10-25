@@ -1,7 +1,7 @@
 import { TABLES } from "@/constants/dbConstants";
 import { courseSchema } from "@/model/course-model";
 import { ratingSchema } from "@/model/rating-model";
-import { referralModel } from "@/model/referral-model";
+import { referralModel, referralSchema } from "@/model/referral-model";
 import { userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
@@ -23,6 +23,10 @@ export const GET = async () => {
             mongoose.model(TABLES.USER, userSchema);
         }
 
+        if (!connection.models[TABLES.REFERRAL]) {
+            mongoose.model(TABLES.REFERRAL, referralSchema);
+        }
+
         /* @TODO => Read from auth session @habib610 Fri October 24,2025 */
         const totalUser = await referralModel
             .find({
@@ -42,7 +46,7 @@ export const GET = async () => {
                     totalReferred: totalReferred,
                     earnedCredit: purchasedUser * 2,
                     pendingCredit: (totalReferred - purchasedUser) * 2,
-                    purchasedUser: totalReferred - purchasedUser,
+                    purchasedUser: purchasedUser,
                 },
             },
             {
