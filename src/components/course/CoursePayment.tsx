@@ -1,18 +1,25 @@
 "use client";
 
 import { createCheckoutSession } from "@/app/actions/stripe";
+import { LOGIN } from "@/constants/appConstants";
+import { redirect } from "next/navigation";
 import { BsArrowRight } from "react-icons/bs";
 
 const CoursePayment = ({
     courseId,
     price,
     title,
+    isLoggedIn,
 }: {
     courseId: string;
     title: string;
     price: number;
+    isLoggedIn: boolean;
 }) => {
     const formAction = async (data: FormData) => {
+        if (!isLoggedIn) {
+            redirect(LOGIN);
+        }
         const { url } = await createCheckoutSession(data);
         window.location.assign(url || "");
     };

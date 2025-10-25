@@ -7,7 +7,9 @@ export const LOGIN: string = "/login";
 export const REGISTRATION: string = "/registration";
 
 export const HOST = (
-    isProdEnv ? process.env.BASE_PROD_URI : process.env.BASE_DEV_URI
+    isProdEnv
+        ? process.env.NEXT_PUBLIC_BASE_PROD_URI
+        : process.env.NEXT_PUBLIC_BASE_DEV_URI
 ) as string;
 
 export const API_URI = (
@@ -19,13 +21,15 @@ export const API_URI = (
 export const NAV_LINKS: NavLink[] = [
     {
         id: 1,
-        name: "Dashboard",
-        path: DASHBOARD,
-    },
-    {
-        id: 2,
         name: "Courses",
         path: COURSES,
+    },
+];
+export const NAV_PROTECTED_LINKS: NavLink[] = [
+    {
+        id: 2,
+        name: "Dashboard",
+        path: DASHBOARD,
     },
 ];
 
@@ -33,3 +37,4 @@ export const COURSE_API_ENDPOINT = `${API_URI}/course`;
 export const DASHBOARD_INFO_API_ENDPOINT = `${API_URI}/dashboard`;
 export const REGISTRATION_API_ENDPOINT = `${API_URI}/auth/registration`;
 export const LOGIN_API_ENDPOINT = `${API_URI}/auth/login`;
+export const CHECKOUT_API_ENDPOINT = `${API_URI}/checkout`;

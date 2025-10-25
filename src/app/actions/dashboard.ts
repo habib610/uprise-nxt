@@ -1,13 +1,14 @@
 import { TABLES } from "@/constants/dbConstants";
 import { courseSchema } from "@/model/course-model";
 import { ratingSchema } from "@/model/rating-model";
-import { referralModel } from "@/model/referral-model";
-import { userSchema } from "@/model/user-model";
+import { referralModel, referralSchema } from "@/model/referral-model";
+import { userModel, userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
-import { NextResponse } from "next/server";
+import { auth } from "../../../auth";
 
-export const GET = async () => {
+export const getUserDashboardInfo = async () => {
+    const session = await auth();
     try {
         const connection = await connectMongoDB();
 
@@ -23,10 +24,20 @@ export const GET = async () => {
             mongoose.model(TABLES.USER, userSchema);
         }
 
+        if (!connection.models[TABLES.REFERRAL]) {
+            mongoose.model(TABLES.REFERRAL, referralSchema);
+        }
+
         /* @TODO => Read from auth session @habib610 Fri October 24,2025 */
+        const user = await userModel.findOne({ email: session?.user?.email });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
         const totalUser = await referralModel
             .find({
-                referrer: `68fa3c5456274be2af95e29b`,
+                referrer: user._id,
             })
             .select(["isPurchased"]);
         const totalReferred = totalUser.length;
@@ -35,28 +46,19 @@ export const GET = async () => {
             0
         );
 
-        return NextResponse.json(
-            {
-                success: true,
-                data: {
-                    totalReferred: totalReferred,
-                    earnedCredit: purchasedUser * 2,
-                    pendingCredit: (totalReferred - purchasedUser) * 2,
-                    purchasedUser: totalReferred - purchasedUser,
-                },
-            },
-            {
-                status: 200,
-            }
-        );
+        return {
+            totalReferred: totalReferred,
+            earnedCredit: user.credit || 0,
+            pendingCredit: totalReferred - purchasedUser,
+            purchasedUser: purchasedUser,
+            code: user.referralCode,
+        };
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
         }
         console.error(error);
-        return Response.json(
-            { success: false, message: "User Info not found" },
-            { status: 404 }
-        );
+
+        throw new Error("User info currently not available");
     }
 };

@@ -1,5 +1,10 @@
 import { IMAGES } from "@/assets";
-import { HOME, LOGIN, NAV_LINKS } from "@/constants/appConstants";
+import {
+    HOME,
+    LOGIN,
+    NAV_LINKS,
+    NAV_PROTECTED_LINKS,
+} from "@/constants/appConstants";
 import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,8 +15,10 @@ import Logout from "./auth/Logout";
 const Navbar = async ({ authPage }: { authPage: boolean }) => {
     const session = await auth();
 
+    const links = session ? [...NAV_LINKS, ...NAV_PROTECTED_LINKS] : NAV_LINKS;
+
     return (
-        <header className="fixed top-0 inset-x-0 z-50 bg-white/5 backdrop-blur-xl border-b border-white/20 shadow-md ">
+        <header className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-md ">
             <div className="container mx-auto flex justify-between items-center px-6 py-1 md:py-2 relative">
                 <Link
                     href={HOME}
@@ -28,7 +35,7 @@ const Navbar = async ({ authPage }: { authPage: boolean }) => {
                 <nav className="hidden md:flex items-center space-x-8">
                     {authPage && (
                         <>
-                            {NAV_LINKS.map((link) => (
+                            {links.map((link) => (
                                 <Link
                                     key={link.name}
                                     href={link.path}
@@ -40,9 +47,19 @@ const Navbar = async ({ authPage }: { authPage: boolean }) => {
 
                             {session?.user ? (
                                 <div className="flex items-center gap-1">
-                                    <span className="mx-1 py-2 bg-primary text-white font-bold rounded-full flex items-center justify-center text-center px-2 h-[30px] w-[30px] text-2xl">
-                                        {session.user.name?.charAt(0)}
-                                    </span>{" "}
+                                    {session.user.image ? (
+                                        <Image
+                                            width={30}
+                                            height={30}
+                                            alt="user_image"
+                                            src={session.user.image}
+                                            className="rounded-full"
+                                        />
+                                    ) : (
+                                        <span className="mx-1 py-2 bg-primary text-white font-bold rounded-full flex items-center justify-center text-center px-2 h-[30px] w-[30px] text-2xl">
+                                            {session.user.name?.charAt(0)}
+                                        </span>
+                                    )}{" "}
                                     |{" "}
                                     <span>
                                         <Logout />

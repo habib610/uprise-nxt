@@ -1,6 +1,10 @@
 "use client";
 
-import { LOGIN, NAV_LINKS } from "@/constants/appConstants";
+import {
+    LOGIN,
+    NAV_LINKS,
+    NAV_PROTECTED_LINKS,
+} from "@/constants/appConstants";
 import { AnimatePresence, motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -15,6 +19,9 @@ const Hamburger = () => {
     useEffect(() => {
         setLoginSession(session);
     }, [session]);
+    const links = loginSession
+        ? [...NAV_LINKS, ...NAV_PROTECTED_LINKS]
+        : NAV_LINKS;
 
     return (
         <>
@@ -56,7 +63,7 @@ const Hamburger = () => {
         rounded-b-2xl shadow-2xl"
                     >
                         <nav className="flex flex-col space-y-2">
-                            {NAV_LINKS.map((link, idx) => (
+                            {links.map((link, idx) => (
                                 <motion.div
                                     key={link.id}
                                     initial={{ x: -20, opacity: 0 }}
