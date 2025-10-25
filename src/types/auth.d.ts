@@ -31,3 +31,10 @@ export interface NewUserType extends EmailAndPasswordData {
     avatar?: string;
     role?: string;
 }
+
+export type RegistrationFormSubmitDataType = {
+    name: string;
+    email: string;
+    password: string;
+    referralCode?: string;
+};

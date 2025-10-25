@@ -1,19 +1,17 @@
 "use client";
 
 import { LOGIN, REGISTRATION_API_ENDPOINT } from "@/constants/appConstants";
-import { RegistrationData, ValidationErrors } from "@/types/auth";
+import {
+    RegistrationData,
+    RegistrationFormSubmitDataType,
+    ValidationErrors,
+} from "@/types/auth";
 import { validateRegistration } from "@/utils";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Input from "../ui/Input";
 
-type RegistrationFormSubmitDataType = {
-    name: string;
-    email: string;
-    password: string;
-    referralCode?: string;
-};
 const RegistrationForm = ({ r }: { r?: string }) => {
     const [errors, setErrors] = useState<ValidationErrors>({});
     const [success, setSuccess] = useState<string>("");
@@ -48,8 +46,6 @@ const RegistrationForm = ({ r }: { r?: string }) => {
 
                 if (r) body.referralCode = r;
 
-                form.reset();
-
                 const res = await fetch(REGISTRATION_API_ENDPOINT, {
                     headers: {
                         "Content-Type": "application/json",
@@ -65,7 +61,9 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     setError(message);
                 } else {
                     form.reset();
+
                     setSuccess("Your account has been created successfully");
+                    redirect(LOGIN);
                 }
                 setLoading(false);
             } catch (error) {
@@ -80,17 +78,6 @@ const RegistrationForm = ({ r }: { r?: string }) => {
     };
     return (
         <div>
-            {success && (
-                <div className="text-green-500 my-4 flex justify-center items-center text-center">
-                    {success}{" "}
-                    <Link
-                        className="text-secondary mx-1 underline"
-                        href={LOGIN}
-                    >
-                        Login
-                    </Link>
-                </div>
-            )}
             {error && <div className="text-red-500 my-4">{error}</div>}
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-8">

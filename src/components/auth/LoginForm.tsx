@@ -18,6 +18,7 @@ const LoginForm = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoginError("");
+        const form = e.currentTarget;
 
         const formData = new FormData(e.currentTarget);
         try {
@@ -32,10 +33,12 @@ const LoginForm = () => {
             if (Object.keys(validationErrors).length === 0) {
                 setLoading(true);
                 const response = await loginWithEmailAndPassword(formData);
-                setLoading(false);
+                form.reset();
+
                 if (!!response.error) {
                     setLoginError(response.error);
                 } else {
+                    setLoading(false);
                     router.push(COURSES);
                 }
             }
