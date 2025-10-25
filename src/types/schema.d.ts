@@ -37,3 +37,11 @@ export interface RatingSchemaType {
     rate: number;
     course: mongoose.Schema.Types.ObjectId;
 }
+
+export interface EnrollmentSchemaType {
+    enrolledDate: Date;
+    status: string;
+    method: string;
+    user: mongoose.Schema.Types.ObjectId;
+    course: mongoose.Schema.Types.ObjectId;
+}

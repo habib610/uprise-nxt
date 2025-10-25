@@ -19,13 +19,15 @@ export const API_URI = (
 export const NAV_LINKS: NavLink[] = [
     {
         id: 1,
-        name: "Dashboard",
-        path: DASHBOARD,
-    },
-    {
-        id: 2,
         name: "Courses",
         path: COURSES,
+    },
+];
+export const NAV_PROTECTED_LINKS: NavLink[] = [
+    {
+        id: 2,
+        name: "Dashboard",
+        path: DASHBOARD,
     },
 ];
 

@@ -1,5 +1,10 @@
 import { IMAGES } from "@/assets";
-import { HOME, LOGIN, NAV_LINKS } from "@/constants/appConstants";
+import {
+    HOME,
+    LOGIN,
+    NAV_LINKS,
+    NAV_PROTECTED_LINKS,
+} from "@/constants/appConstants";
 import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +14,8 @@ import Logout from "./auth/Logout";
 
 const Navbar = async ({ authPage }: { authPage: boolean }) => {
     const session = await auth();
+
+    const links = session ? [...NAV_LINKS, ...NAV_PROTECTED_LINKS] : NAV_LINKS;
 
     return (
         <header className="fixed top-0 inset-x-0 z-50 bg-white/5 backdrop-blur-xl border-b border-white/20 shadow-md ">
@@ -28,7 +35,7 @@ const Navbar = async ({ authPage }: { authPage: boolean }) => {
                 <nav className="hidden md:flex items-center space-x-8">
                     {authPage && (
                         <>
-                            {NAV_LINKS.map((link) => (
+                            {links.map((link) => (
                                 <Link
                                     key={link.name}
                                     href={link.path}
