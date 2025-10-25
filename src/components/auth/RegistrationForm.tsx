@@ -7,7 +7,7 @@ import {
     ValidationErrors,
 } from "@/types/auth";
 import { validateRegistration } from "@/utils";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Input from "../ui/Input";
@@ -17,6 +17,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
     const [success, setSuccess] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const router = useRouter();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -63,7 +64,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     form.reset();
 
                     setSuccess("Your account has been created successfully");
-                    redirect(LOGIN);
+                    router.push(LOGIN);
                 }
                 setLoading(false);
             } catch (error) {
@@ -88,6 +89,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     type="text"
                     label="Name"
                     error={errors.name}
+                    disabled={loading}
                 />
                 <Input
                     placeholder="email"
@@ -96,6 +98,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     type="email"
                     label="Email"
                     error={errors.email}
+                    disabled={loading}
                 />
                 <Input
                     label="Password"
@@ -104,6 +107,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     id="password"
                     type="password"
                     error={errors.password}
+                    disabled={loading}
                 />
                 <Input
                     label="Confirm Password"
@@ -112,6 +116,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     id="confirmPassword"
                     type="password"
                     error={errors.confirmPassword}
+                    disabled={loading}
                 />
                 <button
                     disabled={loading}

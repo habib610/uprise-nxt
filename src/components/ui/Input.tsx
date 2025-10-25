@@ -20,7 +20,7 @@ const Input = ({ label, error, id, ...rest }: InputProps) => {
             <input
                 id={id}
                 className={cn(
-                    "w-full h-full py-4 px-3 placeholder:text-transparent focus:placeholder:text-gray-400 focus:outline-none bg-transparent"
+                    "w-full h-full py-4 px-3 placeholder:text-transparent focus:placeholder:text-gray-400 focus:outline-none bg-transparent disabled:bg-gray-100"
                 )}
                 {...rest}
             />

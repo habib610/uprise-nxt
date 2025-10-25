@@ -66,6 +66,7 @@ const LoginForm = () => {
                     type="text"
                     label="Email"
                     error={errors.email}
+                    disabled={loading}
                 />
                 <Input
                     label="Password"
@@ -74,6 +75,7 @@ const LoginForm = () => {
                     id="password"
                     type="password"
                     error={errors.password}
+                    disabled={loading}
                 />
                 <button
                     disabled={loading}
