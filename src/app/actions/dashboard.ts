@@ -13,25 +13,23 @@ export const getUserDashboardInfo = async () => {
         if (!user) {
             throw new Error("User not found");
         }
+        const totalReferred = await referralModel.countDocuments({
+            referrer: user._id,
+        });
+        const purchasedUser = await referralModel.countDocuments({
+            referrer: user._id,
+            isPurchased: true,
+        });
 
-        const totalUser = await referralModel
-            .find({
-                referrer: user._id,
-            })
-            .select(["isPurchased"]);
-        const totalReferred = totalUser.length;
-        const purchasedUser = totalUser.reduce(
-            (prev, user) => (user.isPurchased ? prev + 1 : prev),
-            0
-        );
-
-        return {
-            totalReferred: totalReferred,
+        const data = {
+            totalReferred,
             earnedCredit: user.credit || 0,
             pendingCredit: totalReferred - purchasedUser,
-            purchasedUser: purchasedUser,
+            purchasedUser,
             code: user.referralCode,
         };
+
+        return data;
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
