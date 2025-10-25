@@ -5,11 +5,10 @@ import { referralModel, referralSchema } from "@/model/referral-model";
 import { userModel, userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { auth } from "../../../auth";
 
-export const POST = async (req: NextRequest) => {
-    const body = await req.json();
-    console.log(body, "reqBody");
+export const getUserDashboardInfo = async () => {
+    const session = await auth();
     try {
         const connection = await connectMongoDB();
 
@@ -28,10 +27,9 @@ export const POST = async (req: NextRequest) => {
         if (!connection.models[TABLES.REFERRAL]) {
             mongoose.model(TABLES.REFERRAL, referralSchema);
         }
-        console.log(body.email);
 
         /* @TODO => Read from auth session @habib610 Fri October 24,2025 */
-        const user = await userModel.findOne({ email: body.email });
+        const user = await userModel.findOne({ email: session?.user?.email });
 
         if (!user) {
             throw new Error("User not found");
@@ -42,35 +40,25 @@ export const POST = async (req: NextRequest) => {
                 referrer: user._id,
             })
             .select(["isPurchased"]);
-        console.log(totalUser);
         const totalReferred = totalUser.length;
         const purchasedUser = totalUser.reduce(
             (prev, user) => (user.isPurchased ? prev + 1 : prev),
             0
         );
 
-        return NextResponse.json(
-            {
-                success: true,
-                data: {
-                    totalReferred: totalReferred,
-                    earnedCredit: user.credit || 0,
-                    pendingCredit: totalReferred - purchasedUser,
-                    purchasedUser: purchasedUser,
-                },
-            },
-            {
-                status: 200,
-            }
-        );
+        return {
+            totalReferred: totalReferred,
+            earnedCredit: user.credit || 0,
+            pendingCredit: totalReferred - purchasedUser,
+            purchasedUser: purchasedUser,
+            code: user.referralCode,
+        };
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
         }
         console.error(error);
-        return Response.json(
-            { success: false, message: "User Info not found" },
-            { status: 404 }
-        );
+
+        throw new Error("User info currently not available");
     }
 };

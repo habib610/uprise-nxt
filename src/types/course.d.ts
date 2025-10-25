@@ -16,7 +16,7 @@ export interface CoursesCardDataType {
     price: number;
     discount?: number;
     duration: number;
-    rating?: Rating;
+    rating?: Rating | undefined;
 }
 export interface CoursesDataType {
     id: string;
@@ -31,6 +31,7 @@ export interface CoursesDataType {
     discount: number;
     duration: number;
     rating: number;
+    canEnroll: boolean;
 }
 
 export type CourseTagType = {

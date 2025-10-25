@@ -13,4 +13,5 @@ export type DashboardInfoType = {
     earnedCredit: number;
     pendingCredit: number;
     purchasedUser: number;
+    code: string;
 };

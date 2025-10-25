@@ -14,7 +14,6 @@ import Logout from "./auth/Logout";
 
 const Navbar = async ({ authPage }: { authPage: boolean }) => {
     const session = await auth();
-    console.log(session);
 
     const links = session ? [...NAV_LINKS, ...NAV_PROTECTED_LINKS] : NAV_LINKS;
 
@@ -48,9 +47,18 @@ const Navbar = async ({ authPage }: { authPage: boolean }) => {
 
                             {session?.user ? (
                                 <div className="flex items-center gap-1">
-                                    <span className="mx-1 py-2 bg-primary text-white font-bold rounded-full flex items-center justify-center text-center px-2 h-[30px] w-[30px] text-2xl">
-                                        {session.user.name?.charAt(0)}
-                                    </span>{" "}
+                                    {session.user.image ? (
+                                        <Image
+                                            width={30}
+                                            height={30}
+                                            alt="user_image"
+                                            src={session.user.image}
+                                        />
+                                    ) : (
+                                        <span className="mx-1 py-2 bg-primary text-white font-bold rounded-full flex items-center justify-center text-center px-2 h-[30px] w-[30px] text-2xl">
+                                            {session.user.name?.charAt(0)}
+                                        </span>
+                                    )}{" "}
                                     |{" "}
                                     <span>
                                         <Logout />

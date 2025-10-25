@@ -5,13 +5,15 @@ import { ratingSchema } from "@/model/rating-model";
 import { referralModel, referralSchema } from "@/model/referral-model";
 import { userModel, userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
+import { CheckoutType } from "@/types/checkout";
 import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { auth } from "../../../auth";
 
-export const POST = async (req: NextRequest) => {
-    const body = await req.json();
+export const completeCourseEnrollment = async (body: CheckoutType) => {
     try {
+        const session = await auth();
         const connection = await connectMongoDB();
+        if (!session?.user?.email) throw new Error("You are not authorized");
 
         if (!connection.models[TABLES.COURSE]) {
             mongoose.model(TABLES.COURSE, courseSchema);
@@ -33,22 +35,11 @@ export const POST = async (req: NextRequest) => {
             mongoose.model(TABLES.ENROLLMENT, enrollmentSchema);
         }
 
-        const user = await userModel.findOne({ email: body.email });
-        if (!user)
-            return NextResponse.json(
-                { success: false, message: "User not found" },
-                {
-                    status: 404,
-                }
-            );
+        const user = await userModel.findOne({ email: session?.user?.email });
+        if (!user) throw new Error("User not found");
+
         const course = await courseModel.findById(body.courseId);
-        if (!course)
-            return NextResponse.json(
-                { success: false, message: "Course not found" },
-                {
-                    status: 404,
-                }
-            );
+        if (!course) throw new Error("Course not found");
 
         const isAlreadyEnrolled = await enrollmentModel.findOne({
             user: user._id,
@@ -56,15 +47,10 @@ export const POST = async (req: NextRequest) => {
         });
 
         if (isAlreadyEnrolled)
-            return NextResponse.json(
-                {
-                    success: true,
-                    message: "You have already enrolled to this course",
-                },
-                {
-                    status: 200,
-                }
-            );
+            return {
+                success: false,
+                message: "You have already enrolled to this course",
+            };
 
         const purchaseResult = await enrollmentModel.create({
             course: body.courseId,
@@ -95,23 +81,13 @@ export const POST = async (req: NextRequest) => {
             }
         }
 
-        return NextResponse.json(
-            { success: true, data: purchaseResult },
-            { status: 201 }
-        );
+        return {
+            success: true,
+            message: "You have already enrolled to this course",
+            data: purchaseResult._id,
+        };
     } catch (error) {
         console.error(error);
-        return NextResponse.json(
-            {
-                success: false,
-                message:
-                    error instanceof Error
-                        ? error.message
-                        : "Registration Failed",
-            },
-            {
-                status: 500,
-            }
-        );
+        throw new Error("Can't purchased at the moment");
     }
 };

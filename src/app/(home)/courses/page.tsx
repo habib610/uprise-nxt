@@ -1,9 +1,9 @@
+import { getAllCourseList } from "@/app/actions/course";
 import CourseCard from "@/components/course/CourseCard";
-import { getAllCourses } from "@/lib/api/course";
 import { CoursesCardDataType } from "@/types/course";
 
 const CoursePage = async () => {
-    const courses: CoursesCardDataType[] = await getAllCourses();
+    const courses: CoursesCardDataType[] = await getAllCourseList();
 
     return (
         <section className="page-main-section mt-30 px-5 lg:px-0 ">

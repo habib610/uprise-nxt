@@ -1,16 +1,22 @@
+import { getCourseDetailsById } from "@/app/actions/course";
 import CourseInstructor from "@/components/course/CourseInstructor";
 import CoursePayment from "@/components/course/CoursePayment";
 import CoursePrice from "@/components/course/CoursePrice";
 import CourseTag from "@/components/course/CourseTag";
+import { COURSES } from "@/constants/appConstants";
 import { getCourseFinalPrice } from "@/helpers";
-import { getCourseById } from "@/lib/api/course";
 import { CoursesDataType, Params } from "@/types/course";
 import Image from "next/image";
+import Link from "next/link";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
+import { auth } from "../../../../../auth";
 
 const CourseDetailsPage = async ({ params }: Params) => {
-    const courseDetails: CoursesDataType = await getCourseById(params.courseId);
+    const session = await auth();
+    const courseDetails: CoursesDataType = await getCourseDetailsById(
+        params.courseId
+    );
     const courseDescriptions: string[] = courseDetails.description.split("\n");
     return (
         <section className="min-h-screen pt-25 lg:pt-30 pb-4 lg:pb-8">
@@ -22,6 +28,11 @@ const CourseDetailsPage = async ({ params }: Params) => {
                         className="object-cover"
                         fill
                     />
+                    {!courseDetails.canEnroll && (
+                        <div className="px-4 py-1  bg-amber-500 inline-flex text-white absolute bottom-0 left-0 mb-2">
+                            Already Enrolled
+                        </div>
+                    )}
                 </div>
                 <div className="px-2">
                     <div className="flex justify-between items-center ">
@@ -33,7 +44,7 @@ const CourseDetailsPage = async ({ params }: Params) => {
                             />
                             <CourseTag
                                 icon={IoEyeOutline}
-                                value={courseDetails.enrolled || 0}
+                                value={courseDetails.enrolled}
                                 subtitle={"Enrolled"}
                             />
                         </div>
@@ -63,14 +74,24 @@ const CourseDetailsPage = async ({ params }: Params) => {
                         </p>
                     ))}
 
-                    <CoursePayment
-                        courseId={params.courseId}
-                        title={courseDetails.title}
-                        price={getCourseFinalPrice(
-                            courseDetails.price,
-                            courseDetails.discount
-                        )}
-                    />
+                    {courseDetails.canEnroll ? (
+                        <CoursePayment
+                            isLoggedIn={session !== null}
+                            courseId={params.courseId}
+                            title={courseDetails.title}
+                            price={getCourseFinalPrice(
+                                courseDetails.price,
+                                courseDetails.discount
+                            )}
+                        />
+                    ) : (
+                        <Link
+                            className="btn-primary bg-violet-800"
+                            href={COURSES}
+                        >
+                            Visit More courses
+                        </Link>
+                    )}
 
                     <CourseInstructor
                         name={courseDetails.instructor.name}
