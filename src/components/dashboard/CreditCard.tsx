@@ -28,7 +28,7 @@ const CreditCard = ({
                 <h1 className="h1 text-white text-8xl font-semibold">
                     {value}
                 </h1>
-                <p>{subTitle}</p>
+                <p className="text-sm">{subTitle}</p>
             </div>
         </div>
     );

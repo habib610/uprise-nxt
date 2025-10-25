@@ -18,7 +18,7 @@ const Navbar = async ({ authPage }: { authPage: boolean }) => {
     const links = session ? [...NAV_LINKS, ...NAV_PROTECTED_LINKS] : NAV_LINKS;
 
     return (
-        <header className="fixed top-0 inset-x-0 z-50 bg-white/5 backdrop-blur-xl border-b border-white/20 shadow-md ">
+        <header className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-md ">
             <div className="container mx-auto flex justify-between items-center px-6 py-1 md:py-2 relative">
                 <Link
                     href={HOME}

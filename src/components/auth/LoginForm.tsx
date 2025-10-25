@@ -5,16 +5,19 @@ import { EmailAndPasswordData, ValidationErrors } from "@/types/auth";
 import { validateLogin } from "@/utils";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Input from "../ui/Input";
 
 const LoginForm = () => {
     const [errors, setErrors] = useState<ValidationErrors>({});
     const [loginError, setLoginError] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     const router = useRouter();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoginError("");
 
         const formData = new FormData(e.currentTarget);
         try {
@@ -22,12 +25,14 @@ const LoginForm = () => {
                 email: formData.get("email") as string,
                 password: formData.get("password") as string,
             };
+            setLoading(true);
 
             const validationErrors = validateLogin(data);
             setErrors(validationErrors);
 
             if (Object.keys(validationErrors).length === 0) {
                 const response = await loginWithEmailAndPassword(formData);
+                setLoading(false);
                 if (!!response.error) {
                     setLoginError(response.error);
                 } else {
@@ -35,6 +40,7 @@ const LoginForm = () => {
                 }
             }
         } catch (error) {
+            setLoading(false);
             setLoginError(
                 error instanceof Error ? error.message : "Something went wrong"
             );
@@ -66,7 +72,18 @@ const LoginForm = () => {
                     type="password"
                     error={errors.password}
                 />
-                <button className="btn-primary">Login</button>
+                <button
+                    disabled={loading}
+                    className="btn-primary flex items-center disabled:bg-gray-500"
+                >
+                    Login{" "}
+                    {loading && (
+                        <AiOutlineLoading3Quarters
+                            size={20}
+                            className="animate-spin ease-in-out"
+                        />
+                    )}
+                </button>
             </form>
         </div>
     );

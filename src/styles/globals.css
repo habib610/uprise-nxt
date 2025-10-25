@@ -19,3 +19,23 @@
         @apply container mx-auto min-h-screen;
     }
 }
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(
+        to right,
+        #e5e7eb 0%,
+        #f9fafb 50%,
+        #e5e7eb 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}

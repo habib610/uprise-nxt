@@ -5,6 +5,7 @@ import { RegistrationData, ValidationErrors } from "@/types/auth";
 import { validateRegistration } from "@/utils";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Input from "../ui/Input";
 
 type RegistrationFormSubmitDataType = {
@@ -131,6 +132,12 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     className="btn-primary disabled:bg-gray-500"
                 >
                     Create Account
+                    {loading && (
+                        <AiOutlineLoading3Quarters
+                            size={20}
+                            className="animate-spin ease-in-out"
+                        />
+                    )}
                 </button>
             </form>
         </div>

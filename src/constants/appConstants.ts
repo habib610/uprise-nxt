@@ -7,7 +7,9 @@ export const LOGIN: string = "/login";
 export const REGISTRATION: string = "/registration";
 
 export const HOST = (
-    isProdEnv ? process.env.BASE_PROD_URI : process.env.BASE_DEV_URI
+    isProdEnv
+        ? process.env.NEXT_PUBLIC_BASE_PROD_URI
+        : process.env.NEXT_PUBLIC_BASE_DEV_URI
 ) as string;
 
 export const API_URI = (

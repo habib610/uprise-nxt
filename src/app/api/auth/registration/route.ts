@@ -8,16 +8,6 @@ import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export const GET = async () => {
-    const users = await userModel.find().lean();
-
-    return NextResponse.json(
-        { success: true, data: users },
-        {
-            status: 200,
-        }
-    );
-};
 export const POST = async (req: Request) => {
     const body = await req.json();
 
@@ -26,7 +16,6 @@ export const POST = async (req: Request) => {
 
     try {
         await connectMongoDB();
-        /* @DESC:: Check existing user @habib610 Thu October 23,2025 */
         const isUserExistByEmail = await userModel.findOne({
             email: body.email,
         });
@@ -43,7 +32,6 @@ export const POST = async (req: Request) => {
             );
         }
 
-        /* @DESC:: Validate referral code if exist @habib610 Thu October 23,2025 */
         if (refCodeByUser !== "") {
             const existingUser = await userModel.findOne({
                 referralCode: refCodeByUser,
@@ -59,7 +47,6 @@ export const POST = async (req: Request) => {
             }
         }
 
-        /* @DESC:: Generate and validate new code for new user @habib610 Thu October 23,2025 */
         let newUserReferralCode = generateReferralCode(body.name);
         while (await userModel.findOne({ referralCode: newUserReferralCode })) {
             newUserReferralCode = generateReferralCode(body.name);

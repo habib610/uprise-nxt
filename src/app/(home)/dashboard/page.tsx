@@ -14,29 +14,32 @@ const DashboardPage = async () => {
             <div className="container mx-auto px-4 lg:px-0">
                 <DashboardHead code={data.code} />
 
-                <div className="grid grid-cols-1  md:grid-cols-2 xl:grid-cols-4 gap-y-8">
+                <div className="grid grid-cols-1  md:grid-cols-2 xl:grid-cols-4 gap-y-8 ">
                     <CreditCard
                         title="Referred Users"
                         value={data?.totalReferred}
-                        subTitle="Whom are referred by you"
+                        subTitle="Users referred by you"
                         className="from-pink-500"
                     />
+
                     <CreditCard
-                        title="Total Credit"
+                        title="Total Credits"
                         value={data.earnedCredit}
-                        subTitle="You earned via referral"
+                        subTitle="Credits earned through referrals"
                         className="from-green-500"
-                    />{" "}
+                    />
+
                     <CreditCard
-                        title="Purchased User"
+                        title="Converted Users"
                         value={data.purchasedUser}
-                        subTitle="Completed first purchase"
+                        subTitle="Users who completed their first purchase"
                         className="from-blue-500"
-                    />{" "}
+                    />
+
                     <CreditCard
-                        title="Pending User"
+                        title="Pending Users"
                         value={data.pendingCredit}
-                        subTitle="User who may purchased"
+                        subTitle="Signed up but not purchased yet"
                         className="from-orange-500"
                     />
                 </div>

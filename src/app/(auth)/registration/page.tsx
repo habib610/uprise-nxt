@@ -1,13 +1,18 @@
 import AuthHead from "@/components/auth/AuthHead";
 import AuthInfo from "@/components/auth/AuthInfo";
 import RegistrationForm from "@/components/auth/RegistrationForm";
+import { checkIfAlreadyLoggedIn } from "@/lib/auth";
 
 type RegistrationParamsType = {
     searchParams: {
         r?: string;
     };
 };
-const RegistrationPage = ({ searchParams: { r } }: RegistrationParamsType) => {
+const RegistrationPage = async ({
+    searchParams: { r },
+}: RegistrationParamsType) => {
+    await checkIfAlreadyLoggedIn();
+
     return (
         <section className="page-main-section  flex justify-center items-center pt-10">
             <div className="auth-card">
