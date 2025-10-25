@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { connectMongoDB } from "@/services/mongodb";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../../styles/globals.css";
@@ -14,11 +15,12 @@ export const metadata: Metadata = {
     description: "An online education platform",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    await connectMongoDB();
     return (
         <html lang="en">
             <head>

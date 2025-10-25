@@ -53,6 +53,7 @@ const Navbar = async ({ authPage }: { authPage: boolean }) => {
                                             height={30}
                                             alt="user_image"
                                             src={session.user.image}
+                                            className="rounded-full"
                                         />
                                     ) : (
                                         <span className="mx-1 py-2 bg-primary text-white font-bold rounded-full flex items-center justify-center text-center px-2 h-[30px] w-[30px] text-2xl">
