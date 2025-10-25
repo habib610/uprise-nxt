@@ -5,7 +5,7 @@ export interface InstructorType {
 }
 
 export type Rating = {
-    rate: number | null;
+    rate: number | undefined;
 };
 
 export interface CoursesCardDataType {
@@ -16,7 +16,7 @@ export interface CoursesCardDataType {
     price: number;
     discount?: number;
     duration: number;
-    rating?: Rating | undefined;
+    rating?: Rating;
 }
 export interface CoursesDataType {
     id: string;
@@ -32,6 +32,15 @@ export interface CoursesDataType {
     duration: number;
     rating: number;
     canEnroll: boolean;
+}
+
+export interface PopulatedRating {
+    rate?: number;
+}
+export interface PopulatedInstructor {
+    name: string;
+    email: string;
+    avatar: string;
 }
 
 export type CourseTagType = {

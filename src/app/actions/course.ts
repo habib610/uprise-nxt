@@ -4,7 +4,12 @@ import { enrollmentModel, enrollmentSchema } from "@/model/enrollment-model";
 import { ratingSchema } from "@/model/rating-model";
 import { userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
-import { CoursesCardDataType, CoursesDataType } from "@/types/course";
+import {
+    CoursesCardDataType,
+    CoursesDataType,
+    PopulatedInstructor,
+    PopulatedRating,
+} from "@/types/course";
 import mongoose from "mongoose";
 import { auth } from "../../../auth";
 
@@ -34,8 +39,11 @@ export const getCourseDetailsById = async (
 
         const course = await courseModel
             .findById(courseId)
-            .populate("rating", "rate")
-            .populate("instructor", "name email avatar");
+            .populate<{ rating: PopulatedRating }>("rating", "rate")
+            .populate<{ instructor: PopulatedInstructor }>(
+                "instructor",
+                "name email avatar"
+            );
 
         if (!course) throw new Error("Course is not found");
 
@@ -103,8 +111,9 @@ export const getAllCourseList = async (): Promise<CoursesCardDataType[]> => {
                 "duration",
                 "rating",
             ])
-            .populate("rating", "rate")
+            .populate<{ rating: PopulatedRating }>("rating", "rate")
             .lean();
+
         return courses.map((course) => ({
             _id: course._id.toString(),
             category: course.category,
@@ -113,9 +122,7 @@ export const getAllCourseList = async (): Promise<CoursesCardDataType[]> => {
             thumbnail: course.thumbnail,
             title: course.title,
             discount: course.discount,
-            rating: {
-                rate: course.rating?.rate || undefined,
-            },
+            rating: course.rating ? { rate: course.rating.rate } : undefined,
         }));
     } catch (error) {
         console.error(error);
