@@ -1,11 +1,12 @@
-import { TABLES } from "@/constants/dbConstants";
-import { courseModel, courseSchema } from "@/model/course-model";
-import { enrollmentModel, enrollmentSchema } from "@/model/enrollment-model";
-import { ratingSchema } from "@/model/rating-model";
-import { userSchema } from "@/model/user-model";
+import { courseModel } from "@/model/course-model";
+import { enrollmentModel } from "@/model/enrollment-model";
 import { connectMongoDB } from "@/services/mongodb";
-import { CoursesCardDataType, CoursesDataType } from "@/types/course";
-import mongoose from "mongoose";
+import {
+    CoursesCardDataType,
+    CoursesDataType,
+    PopulatedInstructor,
+    PopulatedRating,
+} from "@/types/course";
 import { auth } from "../../../auth";
 
 export const getCourseDetailsById = async (
@@ -14,28 +15,15 @@ export const getCourseDetailsById = async (
     try {
         const session = await auth();
 
-        const connection = await connectMongoDB();
-
-        if (!connection.models[TABLES.COURSE]) {
-            mongoose.model(TABLES.COURSE, courseSchema);
-        }
-
-        if (!connection.models[TABLES.RATING]) {
-            mongoose.model(TABLES.RATING, ratingSchema);
-        }
-
-        if (!connection.models[TABLES.USER]) {
-            mongoose.model(TABLES.USER, userSchema);
-        }
-
-        if (!connection.models[TABLES.ENROLLMENT]) {
-            mongoose.model(TABLES.ENROLLMENT, enrollmentSchema);
-        }
+        await connectMongoDB();
 
         const course = await courseModel
             .findById(courseId)
-            .populate("rating", "rate")
-            .populate("instructor", "name email avatar");
+            .populate<{ rating: PopulatedRating }>("rating", "rate")
+            .populate<{ instructor: PopulatedInstructor }>(
+                "instructor",
+                "name email avatar"
+            );
 
         if (!course) throw new Error("Course is not found");
 
@@ -81,15 +69,7 @@ export const getCourseDetailsById = async (
 
 export const getAllCourseList = async (): Promise<CoursesCardDataType[]> => {
     try {
-        const connection = await connectMongoDB();
-
-        if (!connection.models[TABLES.COURSE]) {
-            mongoose.model(TABLES.COURSE, courseSchema);
-        }
-
-        if (!connection.models[TABLES.RATING]) {
-            mongoose.model(TABLES.RATING, ratingSchema);
-        }
+        await connectMongoDB();
 
         const courses = await courseModel
             .find()
@@ -103,8 +83,9 @@ export const getAllCourseList = async (): Promise<CoursesCardDataType[]> => {
                 "duration",
                 "rating",
             ])
-            .populate("rating", "rate")
+            .populate<{ rating: PopulatedRating }>("rating", "rate")
             .lean();
+
         return courses.map((course) => ({
             _id: course._id.toString(),
             category: course.category,
@@ -113,9 +94,7 @@ export const getAllCourseList = async (): Promise<CoursesCardDataType[]> => {
             thumbnail: course.thumbnail,
             title: course.title,
             discount: course.discount,
-            rating: {
-                rate: course.rating?.rate || undefined,
-            },
+            rating: course.rating ? { rate: course.rating.rate } : undefined,
         }));
     } catch (error) {
         console.error(error);
