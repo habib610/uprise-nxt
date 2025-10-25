@@ -1,9 +1,16 @@
 import { DASHBOARD_INFO_API_ENDPOINT } from "@/constants/appConstants";
 import { DashboardInfoType } from "@/types/dashboard";
 
-export const getUserDashboardInfo = async (): Promise<DashboardInfoType> => {
+export const getUserDashboardInfo = async (
+    email?: string | null
+): Promise<DashboardInfoType> => {
+    console.log("USER EMAIL ::::", email);
+
     const res = await fetch(DASHBOARD_INFO_API_ENDPOINT, {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify({
+            email: email,
+        }),
         headers: {
             "Content-Type": "application/json",
         },

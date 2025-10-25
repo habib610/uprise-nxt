@@ -5,9 +5,11 @@ import { checkAuth } from "@/lib/auth";
 import { DashboardInfoType } from "@/types/dashboard";
 
 const DashboardPage = async () => {
-    await checkAuth();
+    const session = await checkAuth();
 
-    const data: DashboardInfoType = await getUserDashboardInfo();
+    const data: DashboardInfoType = await getUserDashboardInfo(
+        session.user?.email
+    );
 
     return (
         <section className="min-h-screen pt-25 pb-8 lg:pt-30">

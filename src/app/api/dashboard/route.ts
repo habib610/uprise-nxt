@@ -2,12 +2,14 @@ import { TABLES } from "@/constants/dbConstants";
 import { courseSchema } from "@/model/course-model";
 import { ratingSchema } from "@/model/rating-model";
 import { referralModel, referralSchema } from "@/model/referral-model";
-import { userSchema } from "@/model/user-model";
+import { userModel, userSchema } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import mongoose from "mongoose";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async () => {
+export const POST = async (req: NextRequest) => {
+    const body = await req.json();
+    console.log(body, "reqBody");
     try {
         const connection = await connectMongoDB();
 
@@ -26,13 +28,21 @@ export const GET = async () => {
         if (!connection.models[TABLES.REFERRAL]) {
             mongoose.model(TABLES.REFERRAL, referralSchema);
         }
+        console.log(body.email);
 
         /* @TODO => Read from auth session @habib610 Fri October 24,2025 */
+        const user = await userModel.findOne({ email: body.email });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
         const totalUser = await referralModel
             .find({
-                referrer: `68fa3c5456274be2af95e29b`,
+                referrer: user._id,
             })
             .select(["isPurchased"]);
+        console.log(totalUser);
         const totalReferred = totalUser.length;
         const purchasedUser = totalUser.reduce(
             (prev, user) => (user.isPurchased ? prev + 1 : prev),
@@ -44,8 +54,8 @@ export const GET = async () => {
                 success: true,
                 data: {
                     totalReferred: totalReferred,
-                    earnedCredit: purchasedUser * 2,
-                    pendingCredit: (totalReferred - purchasedUser) * 2,
+                    earnedCredit: user.credit || 0,
+                    pendingCredit: totalReferred - purchasedUser,
                     purchasedUser: purchasedUser,
                 },
             },

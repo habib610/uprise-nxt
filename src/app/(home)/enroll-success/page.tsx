@@ -48,8 +48,6 @@ const EnrollSuccessPage = async ({
                 error instanceof Error ? error.message : "Enrollment failed"
             );
         }
-
-        /* @TODO => update db @habib610 Fri October 24,2025 */
     } else {
         throw new Error("Payment failed! please try again");
     }
