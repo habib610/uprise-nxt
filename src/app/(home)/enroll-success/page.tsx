@@ -1,6 +1,6 @@
 import { completeCourseEnrollment } from "@/app/actions/checkout";
+import { getCourseDetailsById } from "@/app/actions/course";
 import { COURSES } from "@/constants/appConstants";
-import { getCourseById } from "@/lib/api/course";
 import { checkAuth } from "@/lib/auth";
 import { stripe } from "@/lib/stripe";
 import { CoursesDataType, EnrollSuccessParams } from "@/types/course";
@@ -16,7 +16,7 @@ const EnrollSuccessPage = async ({
         throw new Error("Session id is invalid");
     }
 
-    const course: CoursesDataType = await getCourseById(courseId);
+    const course: CoursesDataType = await getCourseDetailsById(courseId);
 
     const checkoutSession = await stripe.checkout.sessions.retrieve(
         session_id,
