@@ -88,6 +88,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     type="text"
                     label="Name"
                     error={errors.name}
+                    disabled={loading}
                 />
                 <Input
                     placeholder="email"
@@ -96,6 +97,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     type="email"
                     label="Email"
                     error={errors.email}
+                    disabled={loading}
                 />
                 <Input
                     label="Password"
@@ -104,6 +106,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     id="password"
                     type="password"
                     error={errors.password}
+                    disabled={loading}
                 />
                 <Input
                     label="Confirm Password"
@@ -112,6 +115,7 @@ const RegistrationForm = ({ r }: { r?: string }) => {
                     id="confirmPassword"
                     type="password"
                     error={errors.confirmPassword}
+                    disabled={loading}
                 />
                 <button
                     disabled={loading}

@@ -2,7 +2,7 @@
 
 const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center container mx-auto">
             <h2 className="text-2xl font-bold text-red-600 mb-4">
                 Something went wrong
             </h2>

@@ -1,7 +1,14 @@
 import { TABLES } from "@/constants/dbConstants";
-import { EnrollmentSchemaType } from "@/types/schema";
 import mongoose, { Model, Schema } from "mongoose";
-
+export interface EnrollmentSchemaType {
+    enrolledDate: Date;
+    status: string;
+    method: string;
+    paymentType: string;
+    amount: number | null;
+    user: mongoose.Schema.Types.ObjectId;
+    course: mongoose.Schema.Types.ObjectId;
+}
 export const enrollmentSchema = new Schema<EnrollmentSchemaType>({
     enrolledDate: {
         required: true,
