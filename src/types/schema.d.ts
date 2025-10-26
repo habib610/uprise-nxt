@@ -5,7 +5,7 @@ export interface UserSchemaType extends Document {
     email: string;
     password: string;
     referralCode: string;
-    referredBy?: mongoose.Schema.Types.ObjectId;
+    referredBy?: mongoose.Types.ObjectId;
     avatar?: string;
     role: string;
     credit: number;
@@ -17,23 +17,23 @@ export interface CourseSchemaType extends Document {
     description: string;
     category: string;
     enrolled: number;
-    instructor: mongoose.Schema.Types.ObjectId;
+    instructor: mongoose.Types.ObjectId;
     thumbnail: string;
     price: number;
     discount: number;
     duration: number;
-    rating: mongoose.Schema.Types.ObjectId;
+    rating: mongoose.Types.ObjectId;
     updatedAt: Date;
 }
 
 export interface ReferralSchemaType {
-    referrer: mongoose.Schema.Types.ObjectId;
-    referred?: mongoose.Schema.Types.ObjectId;
+    referrer: mongoose.Types.ObjectId;
+    referred?: mongoose.Types.ObjectId;
     isPurchased: boolean;
 }
 
 export interface RatingSchemaType {
-    user: mongoose.Schema.Types.ObjectId;
+    user: mongoose.Types.ObjectId;
     description: string;
     rate: number;
     course: mongoose.Schema.Types.ObjectId;
@@ -45,6 +45,6 @@ export interface EnrollmentSchemaType {
     method: string;
     paymentType: string;
     amount: number | null;
-    user: mongoose.Schema.Types.ObjectId;
-    course: mongoose.Schema.Types.ObjectId;
+    user: mongoose.Types.ObjectId;
+    course: mongoose.Types.ObjectId;
 }
