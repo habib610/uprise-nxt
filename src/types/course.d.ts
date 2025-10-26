@@ -61,3 +61,11 @@ export type EnrollSuccessParams = {
         courseId: string;
     };
 };
+
+export interface PopulatedCourse {
+    title: string;
+    category: string;
+    thumbnail: string;
+    duration: number;
+    price: number;
+}
