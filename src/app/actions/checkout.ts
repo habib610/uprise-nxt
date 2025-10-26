@@ -9,25 +9,39 @@ import { auth } from "../../../auth";
 export const completeCourseEnrollment = async (body: CheckoutType) => {
     try {
         const session = await auth();
+        console.warn("Session User", session?.user);
         await connectMongoDB();
         if (!session?.user?.email) throw new Error("You are not authorized");
 
         const user = await userModel.findOne({ email: session?.user?.email });
+        console.warn("user", user);
         if (!user) throw new Error("User not found");
 
         const course = await courseModel.findById(body.courseId);
         if (!course) throw new Error("Course not found");
+        console.warn("course", course);
 
         const isAlreadyEnrolled = await enrollmentModel.findOne({
             user: user._id,
             course: body.courseId,
         });
 
+        console.log("isEnrolled", isAlreadyEnrolled);
+
         if (isAlreadyEnrolled)
             return {
                 success: false,
                 message: "You have already enrolled to this course",
             };
+
+        console.warn("purchaseData", {
+            course: body.courseId,
+            user: user._id,
+            method: body.paymentMethod,
+            status: "completed",
+            amount: body.amount,
+            enrolledDate: new Date(),
+        });
 
         const purchaseResult = await enrollmentModel.create({
             course: body.courseId,
@@ -38,23 +52,33 @@ export const completeCourseEnrollment = async (body: CheckoutType) => {
             enrolledDate: new Date(),
         });
 
+        console.warn("purchaseResult", purchaseResult);
+
         if (user.referredBy) {
             const referral = await referralModel.findOne({
                 referrer: user.referredBy,
+                referred: user._id,
             });
+
+            console.warn("referral", referral);
 
             if (referral && !referral.isPurchased) {
                 referral.isPurchased = true;
                 await referral.save();
 
-                user.credit = +2;
+                user.credit += 2;
                 await user.save();
 
                 const referrer = await userModel.findById(user.referredBy);
+                console.warn("referrer", referrer);
                 if (referrer) {
                     referrer.credit += 2;
                     await referrer.save();
                 }
+            } else if (!referral) {
+                console.warn(
+                    `Referral record missing for referred user ${user._id}`
+                );
             }
         }
 

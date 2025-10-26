@@ -37,9 +37,8 @@ const EnrollSuccessPage = async ({
                 paymentMethod,
             });
         } catch (error) {
-            throw new Error(
-                error instanceof Error ? error.message : "Enrollment failed"
-            );
+            console.log(error);
+            throw new Error("Enrollment failed Try again");
         }
     }
     return (
