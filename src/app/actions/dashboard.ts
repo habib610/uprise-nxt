@@ -1,6 +1,8 @@
+import { enrollmentModel } from "@/model/enrollment-model";
 import { referralModel } from "@/model/referral-model";
 import { userModel } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
+import { CoursesCardDataType, PopulatedCourse } from "@/types/course";
 import { auth } from "../../../auth";
 
 export const getUserDashboardInfo = async () => {
@@ -21,12 +23,32 @@ export const getUserDashboardInfo = async () => {
             isPurchased: true,
         });
 
+        const enrolled = await enrollmentModel
+            .find({ user: user._id })
+            .select(["amount"])
+            .populate<{ course: PopulatedCourse }>(
+                "course",
+                "_id title category thumbnail price duration "
+            );
+
+        const formattedEnrolledCourse: CoursesCardDataType[] = enrolled.map(
+            (course) => ({
+                _id: course._id.toString(),
+                title: course.course.title,
+                category: course.course.category,
+                duration: course.course.duration,
+                price: course.course.price,
+                thumbnail: course.course.thumbnail,
+            })
+        );
+
         const data = {
             totalReferred,
             earnedCredit: user.credit || 0,
             pendingCredit: totalReferred - purchasedUser,
             purchasedUser,
             code: user.referralCode,
+            enrolled: formattedEnrolledCourse,
         };
 
         return data;

@@ -1,5 +1,6 @@
 import { courseModel } from "@/model/course-model";
 import { enrollmentModel } from "@/model/enrollment-model";
+import { userModel } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import {
     CoursesCardDataType,
@@ -27,13 +28,19 @@ export const getCourseDetailsById = async (
 
         if (!course) throw new Error("Course is not found");
 
-        const enrolled = await enrollmentModel.find({ course: course._id });
+        const totalEnrolled = await enrollmentModel.countDocuments({
+            course: course._id,
+        });
         let canPurchase = true;
-        if (session?.user?.id) {
+        if (session?.user?.email) {
+            const findUserId = await userModel
+                .findOne({ email: session.user.email })
+                .select("_id");
             const isFound = await enrollmentModel.findOne({
-                user: session.user.id,
+                user: findUserId?._id,
                 course: courseId,
             });
+
             if (isFound) {
                 canPurchase = false;
             }
@@ -44,7 +51,7 @@ export const getCourseDetailsById = async (
             description: course.description,
             discount: course.discount,
             duration: course.duration,
-            enrolled: enrolled.length,
+            enrolled: totalEnrolled,
             instructor: {
                 name: course.instructor?.name,
                 email: course.instructor?.email,
