@@ -6,22 +6,28 @@
 
 ## 📖 Table of Contents
 
--   [🎓 Uprise — An online educational platform](#-uprise--an-online-educational-platform)
-    -   [📖 Table of Contents](#-table-of-contents)
-    -   [🧩 Overview](#-overview)
-    -   [✨ Features](#-features)
-    -   [🛠️ Tech Stack](#️-tech-stack)
-    -   [🚀 Getting Started](#-getting-started)
-        -   [Prerequisites](#prerequisites)
-        -   [Installation](#installation)
-        -   [Running Locally](#running-locally)
-    -   [🔐Environment Variables](#environment-variables)
-    -   [🗃️Test Payment](#️test-payment)
-    -   [🔗Live Link](#live-link)
+- [🎓 Uprise — An online educational platform](#-uprise--an-online-educational-platform)
+  - [📖 Table of Contents](#-table-of-contents)
+  - [🧩 Project Overview](#-project-overview)
+  - [✨ Features](#-features)
+  - [🛠️ Tech Stack](#️-tech-stack)
+  - [🧠 Architecture \& Business Logic](#-architecture--business-logic)
+    - [1. Application Architecture](#1-application-architecture)
+    - [2. Signup](#2-signup)
+    - [3. Credit Rewards](#3-credit-rewards)
+  - [🚀 Getting Started](#-getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Running Locally](#running-locally)
+  - [🔐Environment Variables](#environment-variables)
+  - [🗃️Test Payment](#️test-payment)
+  - [📈ER Diagram](#er-diagram)
+  - [📉Data Flow Diagram](#data-flow-diagram)
+  - [🔗Live Link](#live-link)
 
 ---
 
-## 🧩 Overview
+## 🧩 Project Overview
 
 > **Uprise** is an online educational platform where people can learn new skills for the making a better feature. With this they can referrer to their friends and family and earn credits online
 
@@ -55,6 +61,38 @@ Here users can:
 **Deployment:** Vercel
 
 ---
+
+## 🧠 Architecture & Business Logic
+
+### 1. Application Architecture
+
+-   The project is **modular, server-first architecture** used **Next.js App Router**. This project mostly used server actions to for data processing.
+
+### 2. Signup
+
+-   User may or may not use referral code while registration
+-   If a user used a referral code then server will try to validate if code is valid it will keep the reference with referrer in users table
+
+*   Registration Endpoints
+    `http:/localhost:3000/api/registration`
+
+```bash
+{
+
+  "name": "name",
+  "email": "email@email.com",
+  "password": "xxxxxxx",
+  "referralCode": "RAJ5T9" // optional
+}
+```
+
+### 3. Credit Rewards
+
+-   Once a referred user do his/her first purchase
+-   -   User will earn 2 credits
+-   -   The referrer user will earn 2 credits
+-   -   It will works only for first time purchase
+-   -   Rest of the purchase no credits will be added
 
 ## 🚀 Getting Started
 
@@ -123,6 +161,14 @@ AUTH_SECRET=<your_uth_secret_key>
 ```bash
 Test cards: 4242 4242 4242 4242 (Visa) — any future expiry, any CVC.
 ```
+
+## 📈ER Diagram
+
+![Entity Relationship](./uprising_er_diagram.jpg)
+
+## 📉Data Flow Diagram
+
+![Entity Relationship](./data-flow.png)
 
 ## 🔗Live Link
 
