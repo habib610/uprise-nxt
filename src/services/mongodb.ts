@@ -3,6 +3,7 @@ import { MONGODB_CONNECTION_URI, TABLES } from "@/constants/dbConstants";
 import { courseSchema } from "@/model/course-model";
 import { enrollmentSchema } from "@/model/enrollment-model";
 import { ratingSchema } from "@/model/rating-model";
+import { referralSchema } from "@/model/referral-model";
 import { userSchema } from "@/model/user-model";
 import mongoose from "mongoose";
 
@@ -23,7 +24,7 @@ export const defineAllModels = (): void => {
         mongoose.model(TABLES.ENROLLMENT, enrollmentSchema);
     }
     if (!mongoose.models[TABLES.REFERRAL]) {
-        mongoose.model(TABLES.REFERRAL, enrollmentSchema);
+        mongoose.model(TABLES.REFERRAL, referralSchema);
     }
 };
 

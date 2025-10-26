@@ -27,7 +27,7 @@ export type AuthHeadData = {
 export interface NewUserType extends EmailAndPasswordData {
     name: string;
     referralCode?: string;
-    referredBy?: mongoose.Schema.Types.ObjectId;
+    referredBy?: mongoose.Types.ObjectId;
     avatar?: string;
     role?: string;
 }

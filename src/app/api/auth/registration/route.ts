@@ -3,19 +3,18 @@ import { referralModel } from "@/model/referral-model";
 import { userModel } from "@/model/user-model";
 import { connectMongoDB } from "@/services/mongodb";
 import { NewUserType } from "@/types/auth";
-import { UserSchemaType } from "@/types/schema";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {
-    const body = await req.json();
-
-    const refCodeByUser: string = body.referralCode || "";
-    let referredUserId: mongoose.Schema.Types.ObjectId | undefined;
-
     try {
+        const body = await req.json();
+
+        const refCodeByUser: string = body.referralCode || "";
+        let referredUserId: mongoose.Types.ObjectId | null = null;
         await connectMongoDB();
+
         const isUserExistByEmail = await userModel.findOne({
             email: body.email,
         });
@@ -32,19 +31,17 @@ export const POST = async (req: Request) => {
             );
         }
 
-        if (refCodeByUser !== "") {
+        if (refCodeByUser) {
             const existingUser = await userModel.findOne({
                 referralCode: refCodeByUser,
             });
 
-            if (existingUser && existingUser._id) {
-                referredUserId =
-                    existingUser._id as mongoose.Schema.Types.ObjectId;
-            } else {
+            if (!existingUser) {
                 return new NextResponse("Invalid Referral Code", {
                     status: 400,
                 });
             }
+            referredUserId = existingUser._id as mongoose.Types.ObjectId;
         }
 
         let newUserReferralCode = generateReferralCode(body.name);
@@ -62,9 +59,9 @@ export const POST = async (req: Request) => {
             avatar: body?.avatar || null,
         };
 
-        const newUser: UserSchemaType = await userModel.create({
+        const newUser = await userModel.create({
             ...user,
-            referredBy: referredUserId ? referredUserId : null,
+            referredBy: referredUserId,
         });
 
         if (referredUserId) {
