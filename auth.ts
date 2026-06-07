@@ -10,6 +10,12 @@ export const {
     signOut,
     handlers: { GET, POST },
 } = NextAuth({
+    // Read secret from common env var names so NextAuth has a signing key.
+    // Priority: NEXTAUTH_SECRET, AUTH_SECRET, SECRET_KEY
+    secret:
+        process.env.NEXTAUTH_SECRET ||
+        process.env.AUTH_SECRET ||
+        process.env.SECRET_KEY,
     session: {
         strategy: "jwt",
     },
@@ -38,7 +44,7 @@ export const {
 
                     const isMatch = await bcrypt.compare(
                         creds.password,
-                        user.password
+                        user.password,
                     );
                     if (!isMatch) {
                         throw new Error("Invalid credentials");
@@ -54,7 +60,7 @@ export const {
                     throw new Error(
                         error instanceof Error
                             ? error.message
-                            : "Login error! try again later"
+                            : "Login error! try again later",
                     );
                 }
             },
