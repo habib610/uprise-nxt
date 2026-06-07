@@ -10,7 +10,7 @@ export const {
     signOut,
     handlers: { GET, POST },
 } = NextAuth({
-    // Read secret from common env var names so NextAuth has a signing key.
+    // Read secret from common env var names so NextAuth has a signing key. NEXTAUTH_SECRET yesiamusingmysupersecretkey
     // Priority: NEXTAUTH_SECRET, AUTH_SECRET, SECRET_KEY
     secret:
         process.env.NEXTAUTH_SECRET ||

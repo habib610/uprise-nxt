@@ -13,6 +13,10 @@ export async function createCheckoutSession(data: FormData) {
 
     const origin: string = headers().get("origin") || "";
 
+    if (!stripe) {
+        throw new Error("Stripe is not configured. Set STRIPE_SECRET_KEY in environment.");
+    }
+
     const checkoutSession = await stripe.checkout.sessions.create({
         mode: "payment",
         submit_type: "pay",
@@ -44,6 +48,10 @@ export async function createCheckoutSession(data: FormData) {
 
 export async function createPaymentIntent(data: FormData) {
     const price: number = (data.get("price") || 0) as number;
+    if (!stripe) {
+        throw new Error("Stripe is not configured. Set STRIPE_SECRET_KEY in environment.");
+    }
+
     const paymentIntent = await stripe.paymentIntents.create({
         amount: price * 100,
         automatic_payment_methods: { enabled: true },

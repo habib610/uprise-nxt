@@ -2,6 +2,7 @@ import { completeCourseEnrollment } from "@/app/actions/checkout";
 import { getCourseDetailsById } from "@/app/actions/course";
 import { COURSES } from "@/constants/appConstants";
 import { checkAuth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
 import { CoursesDataType, EnrollSuccessParams } from "@/types/course";
 import Link from "next/link";
@@ -12,11 +13,19 @@ const EnrollSuccessPage = async ({
 }: EnrollSuccessParams) => {
     await checkAuth();
 
-    if (!session_id) {
-        throw new Error("Session id is invalid");
+    // During build or direct navigation `searchParams` may be empty.
+    // Redirect to courses page instead of throwing so Next.js can collect page data.
+    if (!session_id || !courseId) {
+        // client will handle messaging; server redirects prevent build errors
+        return redirect(COURSES);
     }
 
     const course: CoursesDataType = await getCourseDetailsById(courseId);
+
+    if (!stripe) {
+        // Stripe not configured in environment — avoid runtime/build errors
+        return redirect(COURSES);
+    }
 
     const checkoutSession = await stripe.checkout.sessions.retrieve(
         session_id,
